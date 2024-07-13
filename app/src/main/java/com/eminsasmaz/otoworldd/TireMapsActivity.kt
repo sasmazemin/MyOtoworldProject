@@ -8,6 +8,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,13 +23,22 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.eminsasmaz.otoworldd.databinding.ActivityTireMapsBinding
+import com.eminsasmaz.otoworldd.model.InspectionModel
+import com.eminsasmaz.otoworldd.model.TireModel
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 
 class TireMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLongClickListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityTireMapsBinding
+    private lateinit var db: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
     private lateinit var locationManager: LocationManager
     private lateinit var locationListener: LocationListener
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
@@ -36,6 +46,7 @@ class TireMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLongClickL
     private var trackBoolean: Boolean?=null
     private var selectedLatitude:Double?=null
     private var selectedLongitude:Double?=null
+    private lateinit var tireArrayList:ArrayList<TireModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +54,9 @@ class TireMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLongClickL
         binding = ActivityTireMapsBinding.inflate(layoutInflater)
         val view=binding.root
         setContentView(view)
+
+        db= Firebase.firestore
+        auth= Firebase.auth
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -55,12 +69,58 @@ class TireMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLongClickL
         trackBoolean=false
         selectedLatitude=0.0
         selectedLongitude=0.0
+
+        tireArrayList=ArrayList<TireModel>()
+    }
+
+    private fun getData(){
+
+        db.collection("TireFirms").addSnapshotListener { value, error ->
+
+            if(error!=null){
+                Toast.makeText(this,"Error occured",Toast.LENGTH_LONG).show()
+                Log.e("TireMapsActivity","Error occured",error)
+                return@addSnapshotListener
+            }else{
+                if(value!=null){
+                    if(!value.isEmpty){
+                        val documents= value.documents
+
+                        for (document in documents) {
+                            val tireAdress = document.getString("tireAdress") ?: "No Address"
+                            val tireContact = document.getString("tireContact") ?: "No Contact"
+                            val tireFirmName = document.getString("tireFirmName") ?: "No Firm Name"
+                            val tireImageUrl = document.getString("tireImageUrl") ?: "No Image"
+                            val location = document.getGeoPoint("location")
+                            val tirePriceList = document.getString("tirePriceList") ?: "No Price List"
+                            val tireStatus = document.getBoolean("tireStatus") ?: false
+                            val tireWorkingHours = document.getString("tireWorkingHours") ?: "No Working Hours"
+
+                            if (location != null) {
+                                val tireList = TireModel(
+                                    tireAdress,tireContact,tireFirmName,tireImageUrl,location,location.latitude,location.longitude,
+                                    tirePriceList,tireStatus,tireWorkingHours
+                                )
+                                println(tireAdress)
+                                tireArrayList.add(tireList)
+                                mMap.addMarker(MarkerOptions().title(tireFirmName).position(LatLng(location.latitude, location.longitude)))
+                            }
+
+                        }
+
+                    }
+                }
+            }
+        }
+
     }
 
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.setOnMapLongClickListener(this)
+
+        getData()
 
         locationManager=this.getSystemService(LOCATION_SERVICE) as LocationManager
 

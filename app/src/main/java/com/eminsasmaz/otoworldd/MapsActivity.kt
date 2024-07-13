@@ -66,9 +66,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMapLongClickList
 
             registerLauncher()
 
-
-
-
         sharedPreferences=this.getSharedPreferences("com.eminsasmaz.otoworldd", MODE_PRIVATE)
         trackBoolean=false
         selectedLatitude=0.0
@@ -109,44 +106,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMapLongClickList
                                 parkArrayList.add(parkList)
                                 mMap.addMarker(MarkerOptions().title(parkFirmName).position(LatLng(location.latitude, location.longitude)))
                             }
-                            //mMap.addMarker(MarkerOptions().title(parkFirmName).position(LatLng(parkLatitude,parkLongitude)))
-                            /*
-                            val post=CarparkModel("Abc","0548994489","Deniz Oto Park","slkdjnafloa",38.4932625,43.3734362,"1 saat 50 tl",true,"09:00")
-                            val post1=CarparkModel("def","043224282","Kral Oto Park","dafssda", 38.4968597,43.3810909,"1 saat 50 tl",true,"09:00")
-                            val post2=CarparkModel("ghu","0548994489","Deniz Oto Park","slkdjfmfnafloa",38.493263,43.381161,"1 saat 50 tl",true,"09:00")
-                            mMap.addMarker(MarkerOptions().title(post.parkFirmName).position(LatLng(post.parkLatitude,post.parkLongitude)))
-                            mMap.addMarker(MarkerOptions().title(post1.parkFirmName).position(LatLng(post1.parkLatitude,post1.parkLongitude)))
-                            mMap.addMarker(MarkerOptions().title(post2.parkFirmName).position(LatLng(post2.parkLatitude,post2.parkLongitude)))*/
 
                         }
-                        /*
-                        for (park in parkArrayList){
-                            val latitudes=park.parkLatitude
-                            val longitudes=park.parkLongitude
-                            val firmNames=park.parkFirmName
-                            mMap.addMarker(MarkerOptions().title(firmNames).position(LatLng(latitudes,longitudes)))
-                        }*/
+
                     }
                 }
             }
         }
-        /*
-        var sayac=0
-        while (sayac<4){
-            val latitudes = parkArrayList[sayac].parkLatitude
-            val longitudes = parkArrayList[sayac].parkLatitude
-            val firmNames = parkArrayList[sayac].parkFirmName
-            mMap.addMarker(MarkerOptions().title(parkArrayList[sayac].parkFirmName).position(LatLng(latitudes,longitudes)))
-            sayac++
-
-        }
-        // Burada firebase'de GeoPoint kullanacağım değişecek buralar.
-        */
-
 
     }
-
-
 
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -154,8 +122,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMapLongClickList
         mMap.setOnMapLongClickListener(this)
 
         getData()
-
-
 
         locationManager=this.getSystemService(LOCATION_SERVICE) as LocationManager
 

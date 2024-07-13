@@ -8,6 +8,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,13 +23,22 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.eminsasmaz.otoworldd.databinding.ActivityTowMapsBinding
+import com.eminsasmaz.otoworldd.model.InspectionModel
+import com.eminsasmaz.otoworldd.model.TowModel
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 
 class TowMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLongClickListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityTowMapsBinding
+    private lateinit var db: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
     private lateinit var locationManager: LocationManager
     private lateinit var locationListener: LocationListener
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
@@ -36,6 +46,7 @@ class TowMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLongClickLi
     private var trackBoolean: Boolean?=null
     private var selectedLatitude:Double?=null
     private var selectedLongitude:Double?=null
+    private lateinit var towArrayList:ArrayList<TowModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +54,9 @@ class TowMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLongClickLi
         binding = ActivityTowMapsBinding.inflate(layoutInflater)
         val view=binding.root
         setContentView(view)
+
+        db= Firebase.firestore
+        auth= Firebase.auth
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -55,12 +69,58 @@ class TowMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLongClickLi
         trackBoolean=false
         selectedLatitude=0.0
         selectedLongitude=0.0
+
+        towArrayList=ArrayList<TowModel>()
+    }
+
+    private fun getData(){
+
+        db.collection("TowFirms").addSnapshotListener { value, error ->
+
+            if(error!=null){
+                Toast.makeText(this,"Error occured",Toast.LENGTH_LONG).show()
+                Log.e("TowMapsActivity","Error occured",error)
+                return@addSnapshotListener
+            }else{
+                if(value!=null){
+                    if(!value.isEmpty){
+                        val documents= value.documents
+
+                        for (document in documents) {
+                            val towAdress = document.getString("towAdress") ?: "No Address"
+                            val towContact = document.getString("towContact") ?: "No Contact"
+                            val towFirmName = document.getString("towFirmName") ?: "No Firm Name"
+                            val towImageUrl = document.getString("towImageUrl") ?: "No Image"
+                            val location = document.getGeoPoint("location")
+                            val towPriceList = document.getString("towPriceList") ?: "No Price List"
+                            val towStatus = document.getBoolean("towStatus") ?: false
+                            val towWorkingHours = document.getString("towWorkingHours") ?: "No Working Hours"
+
+                            if (location != null) {
+                                val towList = TowModel(
+                                    towAdress,towContact,towFirmName,towImageUrl,location,location.latitude,location.longitude,
+                                    towPriceList,towStatus,towWorkingHours
+                                )
+                                println(towAdress)
+                                towArrayList.add(towList)
+                                mMap.addMarker(MarkerOptions().title(towFirmName).position(LatLng(location.latitude, location.longitude)))
+                            }
+
+                        }
+
+                    }
+                }
+            }
+        }
+
     }
 
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.setOnMapLongClickListener(this)
+
+        getData()
 
         locationManager=this.getSystemService(LOCATION_SERVICE) as LocationManager
 
