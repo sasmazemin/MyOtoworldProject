@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "577024442182",
+    "project_id": "otoworldd-84876",
+    "storage_bucket": "otoworldd-84876.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:577024442182:android:b58ffe5227c6d9122aaf47",
+        "android_client_info": {
+          "package_name": "com.eminsasmaz.otoworldd"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOYQCRaVLQVldtbtK1GuqnFVwWLoc_Row"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

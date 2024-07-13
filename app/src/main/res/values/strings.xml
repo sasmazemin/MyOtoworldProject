@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Otoworldd</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="google_map_api_key">AIzaSyBPyN3hfy2dTatcOAjnPpUES3fBReHGCeE</string>
+    <string name="title_activity_carpark_maps">CarparkMapsActivity</string>
+    <string name="title_activity_inspection_maps">InspectionMapsActivity</string>
+    <string name="title_activity_tire_maps">TireMapsActivity</string>
+    <string name="title_activity_tow_maps">TowMapsActivity</string>
+</resources>
