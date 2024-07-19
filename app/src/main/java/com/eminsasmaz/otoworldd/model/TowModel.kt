@@ -13,4 +13,4 @@ data class TowModel (
     val towPriceList: String,
     val towStatus: Boolean,
     val towWorkingHours: String
-    )
+)

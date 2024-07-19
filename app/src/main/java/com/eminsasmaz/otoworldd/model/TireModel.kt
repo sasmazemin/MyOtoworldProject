@@ -13,4 +13,4 @@ data class TireModel (
     val tirePriceList: String,
     val tireStatus: Boolean,
     val tireWorkingHours: String
-    )
+)

@@ -13,7 +13,7 @@
         android:title="My Cars"
         android:id="@+id/myCarsFragment"
         android:icon="@drawable/car_svgrepo_com_2_gray" />
-    <item 
+    <item
         android:title="Profile"
         android:id="@+id/profileFragment"
         android:icon="@drawable/profile_circle_svgrepo_com_1_footbar" />

@@ -1,3 +1,4 @@
+
 package com.eminsasmaz.otoworldd
 
 import android.content.Intent
@@ -24,13 +25,13 @@ class LoginActivity : AppCompatActivity() {
         auth=Firebase.auth
 
         val currentUser=auth.currentUser
-/*
-if(currentUser!=null){
-            val intent=Intent(this,MapsActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
- */
+        /*
+        if(currentUser!=null){
+                    val intent=Intent(this,MapsActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+         */
 
 
     }

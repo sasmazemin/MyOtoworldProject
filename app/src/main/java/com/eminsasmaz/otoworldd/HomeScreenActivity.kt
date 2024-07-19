@@ -1,3 +1,4 @@
+
 package com.eminsasmaz.otoworldd
 
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +32,4 @@ class HomeScreenActivity : AppCompatActivity() {
 
     }
 
-    }
-
-
+}

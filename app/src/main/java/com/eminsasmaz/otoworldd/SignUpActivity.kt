@@ -1,3 +1,4 @@
+
 package com.eminsasmaz.otoworldd
 
 import android.content.Intent
@@ -52,7 +53,7 @@ class SignUpActivity : AppCompatActivity() {
         }
 
     }
-    }
+}
 
 
 

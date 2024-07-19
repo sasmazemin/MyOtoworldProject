@@ -1,3 +1,4 @@
+
 package com.eminsasmaz.otoworldd.adapter
 
 import android.content.Intent
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eminsasmaz.otoworldd.HomeScreenActivity
 import com.eminsasmaz.otoworldd.InspectionMapsActivity
 import com.eminsasmaz.otoworldd.MapsActivity
+import com.eminsasmaz.otoworldd.ParkFirmDetailActivity
 import com.eminsasmaz.otoworldd.TireMapsActivity
 import com.eminsasmaz.otoworldd.TowMapsActivity
 import com.eminsasmaz.otoworldd.databinding.ServicesItemBinding
@@ -37,7 +39,7 @@ class ServiceAdapter(private val items:List<String>,private val image:List<Int>)
         holder.bind(item,images)
 
         holder.itemView.setOnClickListener{
-           // val intent =Intent(holder.itemView.context,CarparkMapsActivity::class.java)
+            // val intent =Intent(holder.itemView.context,CarparkMapsActivity::class.java)
             //holder.itemView.context.startActivity(intent)
             val context=holder.itemView.context
             val intent=when(position){

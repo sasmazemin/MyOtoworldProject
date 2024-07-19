@@ -1,6 +1,7 @@
 package com.eminsasmaz.otoworldd
 
 import android.Manifest
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
@@ -24,6 +25,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.eminsasmaz.otoworldd.databinding.ActivityMapsBinding
 import com.eminsasmaz.otoworldd.model.CarparkModel
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
+import com.google.android.gms.maps.model.Marker
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.integrity.internal.i
 import com.google.firebase.Firebase
@@ -33,7 +36,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.firestore
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMapLongClickListener {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMarkerClickListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
@@ -64,7 +67,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMapLongClickList
         mapFragment.getMapAsync(this)
 
 
-            registerLauncher()
+        registerLauncher()
 
         sharedPreferences=this.getSharedPreferences("com.eminsasmaz.otoworldd", MODE_PRIVATE)
         trackBoolean=false
@@ -102,10 +105,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMapLongClickList
                                     parkAdress, parkContact, parkFirmName, parkImageUrl, location,
                                     location.latitude, location.longitude, parkPriceList, parkStatus, parkWorkingHours
                                 )
-                                println(parkAdress)
+                                //println(parkFirmName)
                                 parkArrayList.add(parkList)
-                                mMap.addMarker(MarkerOptions().title(parkFirmName).position(LatLng(location.latitude, location.longitude)))
+                                val marker=mMap.addMarker(
+                                    MarkerOptions().title(parkFirmName).position(LatLng(location.latitude,location.longitude))
+                                )
+                                marker?.tag=parkList
                             }
+
 
                         }
 
@@ -119,9 +126,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMapLongClickList
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap.setOnMapLongClickListener(this)
 
         getData()
+        mMap.setOnMarkerClickListener(this)
 
         locationManager=this.getSystemService(LOCATION_SERVICE) as LocationManager
 
@@ -139,7 +146,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMapLongClickList
 
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)!=PackageManager.PERMISSION_GRANTED){
             if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION)){
-                    Snackbar.make(binding.root,"Permission needed for location",Snackbar.LENGTH_INDEFINITE).setAction("Give Permission"){
+                Snackbar.make(binding.root,"Permission needed for location",Snackbar.LENGTH_INDEFINITE).setAction("Give Permission"){
 
                     //request permission
                     permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -161,7 +168,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMapLongClickList
 
         }
 
-       // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0f,locationListener)
+        // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0f,locationListener)
 
     }
     private fun registerLauncher(){
@@ -186,12 +193,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMapLongClickList
         }
     }
 
-    override fun onMapLongClick(p0: LatLng) {
-        mMap.clear()
-        mMap.addMarker(MarkerOptions().position(p0))
 
-        selectedLatitude=p0.latitude
-        selectedLongitude=p0.longitude
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+        val firm = marker.tag as? CarparkModel
+        if (firm != null) {
+            val intent = Intent(this, ParkFirmDetailActivity::class.java)
+            intent.putExtra("FIRM", firm)
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "Firm details not found", Toast.LENGTH_SHORT).show()
+        }
+        return true
     }
 
 }

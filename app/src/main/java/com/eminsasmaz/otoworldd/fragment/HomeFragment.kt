@@ -1,3 +1,4 @@
+
 package com.eminsasmaz.otoworldd.fragment
 
 import android.os.Bundle
@@ -60,7 +61,7 @@ class HomeFragment : Fragment() {
         })
         binding.serviceRecyclerView.layoutManager=LinearLayoutManager(this.context)
         val serviceName= listOf("Carpark","Inspection","Tire","Tow")
-        val serviceImages= listOf(R.drawable.parking_car_svgrepo_com_1,R.drawable._nspection,R.drawable.changing_car_tire_svgrepo_com_1,R.drawable.car_breakdown_tow_svgrepo_com_1)
+        val serviceImages= listOf(R.drawable.parking_car_svgrepo_com_1,R.drawable.inspection,R.drawable.changing_car_tire_svgrepo_com_1,R.drawable.car_breakdown_tow_svgrepo_com_1)
         serviceAdapter= ServiceAdapter(serviceName,serviceImages)
         binding.serviceRecyclerView.adapter=serviceAdapter
 
