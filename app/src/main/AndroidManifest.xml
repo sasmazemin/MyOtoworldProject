@@ -18,6 +18,12 @@
         android:theme="@style/Theme.Otoworldd"
         tools:targetApi="31">
         <activity
+            android:name=".view.TowFirmDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.TireFirmDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.InspectionFirmDetailActivity"
             android:exported="false" />
         <activity

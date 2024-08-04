@@ -1,4 +1,4 @@
-package com.eminsasmaz.otoworldd.view
+package com.eminsasmaz.otoworldd.model
 
 import android.os.Parcel
 import android.os.Parcelable

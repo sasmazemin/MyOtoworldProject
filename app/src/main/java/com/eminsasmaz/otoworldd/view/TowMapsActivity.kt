@@ -2,6 +2,7 @@
 package com.eminsasmaz.otoworldd.view
 
 import android.Manifest
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
@@ -24,8 +25,11 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.eminsasmaz.otoworldd.databinding.ActivityTowMapsBinding
+import com.eminsasmaz.otoworldd.model.TireModel
 import com.eminsasmaz.otoworldd.model.TowModel
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
+import com.google.android.gms.maps.model.Marker
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -33,7 +37,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 
-class TowMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLongClickListener {
+class TowMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityTowMapsBinding
@@ -101,9 +105,12 @@ class TowMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLongClickLi
                                     towAdress,towContact,towFirmName,towImageUrl,location,location.latitude,location.longitude,
                                     towPriceList,towStatus,towWorkingHours
                                 )
-                                println(towAdress)
+                                //println(towAdress)
                                 towArrayList.add(towList)
-                                mMap.addMarker(MarkerOptions().title(towFirmName).position(LatLng(location.latitude, location.longitude)))
+                                val marker=mMap.addMarker(
+                                    MarkerOptions().title(towFirmName).position(LatLng(location.latitude,location.longitude))
+                                )
+                                marker?.tag=towList
                             }
 
                         }
@@ -118,7 +125,7 @@ class TowMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLongClickLi
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap.setOnMapLongClickListener(this)
+        mMap.setOnMarkerClickListener(this)
 
         getData()
 
@@ -185,11 +192,17 @@ class TowMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLongClickLi
         }
     }
 
-    override fun onMapLongClick(p0: LatLng) {
-        mMap.clear()
-        mMap.addMarker(MarkerOptions().position(p0))
-
-        selectedLatitude=p0.latitude
-        selectedLongitude=p0.longitude
+    override fun onMarkerClick(marker: Marker): Boolean {
+        val firm = marker.tag as? TowModel
+        if (firm != null) {
+            //burada towFirmDetailActiviy oluşturulup verilecek
+            val intent = Intent(this, TowFirmDetailActivity::class.java)
+            intent.putExtra("FIRM", firm)
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "Firm details not found", Toast.LENGTH_SHORT).show()
+        }
+        return true
     }
+
 }

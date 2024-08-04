@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.eminsasmaz.otoworldd.databinding.ActivityInspectionFirmDetailBinding
+import com.eminsasmaz.otoworldd.model.InspectionModel
 
 class InspectionFirmDetailActivity : AppCompatActivity() {
     private lateinit var binding:ActivityInspectionFirmDetailBinding
