@@ -1,5 +1,5 @@
 
-package com.eminsasmaz.otoworldd
+package com.eminsasmaz.otoworldd.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +10,6 @@ import com.eminsasmaz.otoworldd.databinding.ActivityLoginBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
-import com.google.firebase.auth.oAuthCredential
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding:ActivityLoginBinding
@@ -36,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
 
     }
     fun dontHaveClicked(view: View){
-        val intent=Intent(this@LoginActivity,SignUpActivity::class.java)
+        val intent=Intent(this@LoginActivity, SignUpActivity::class.java)
         startActivity(intent)
         finish()
     }
@@ -49,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this,"Enter email and password",Toast.LENGTH_LONG).show()
         }else{
             auth.signInWithEmailAndPassword(email,password).addOnSuccessListener {
-                val intent=Intent(this,HomeScreenActivity::class.java)
+                val intent=Intent(this, HomeScreenActivity::class.java)
                 startActivity(intent)
                 finish()
             }.addOnFailureListener {

@@ -5,12 +5,11 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.eminsasmaz.otoworldd.HomeScreenActivity
-import com.eminsasmaz.otoworldd.InspectionMapsActivity
-import com.eminsasmaz.otoworldd.MapsActivity
-import com.eminsasmaz.otoworldd.ParkFirmDetailActivity
-import com.eminsasmaz.otoworldd.TireMapsActivity
-import com.eminsasmaz.otoworldd.TowMapsActivity
+import com.eminsasmaz.otoworldd.view.HomeScreenActivity
+import com.eminsasmaz.otoworldd.view.InspectionMapsActivity
+import com.eminsasmaz.otoworldd.view.MapsActivity
+import com.eminsasmaz.otoworldd.view.TireMapsActivity
+import com.eminsasmaz.otoworldd.view.TowMapsActivity
 import com.eminsasmaz.otoworldd.databinding.ServicesItemBinding
 
 class ServiceAdapter(private val items:List<String>,private val image:List<Int>):RecyclerView.Adapter<ServiceAdapter.ServiceViewHolder>() {
@@ -43,11 +42,11 @@ class ServiceAdapter(private val items:List<String>,private val image:List<Int>)
             //holder.itemView.context.startActivity(intent)
             val context=holder.itemView.context
             val intent=when(position){
-                0->Intent(context,MapsActivity::class.java)
-                1-> Intent(context,InspectionMapsActivity::class.java)
-                2-> Intent(context,TireMapsActivity::class.java)
-                3-> Intent(context,TowMapsActivity::class.java)
-                else -> Intent(context,HomeScreenActivity::class.java)
+                0->Intent(context, MapsActivity::class.java)
+                1-> Intent(context, InspectionMapsActivity::class.java)
+                2-> Intent(context, TireMapsActivity::class.java)
+                3-> Intent(context, TowMapsActivity::class.java)
+                else -> Intent(context, HomeScreenActivity::class.java)
             }
             context.startActivity(intent)
         }

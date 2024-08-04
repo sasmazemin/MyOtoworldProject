@@ -1,10 +1,11 @@
 
-package com.eminsasmaz.otoworldd
+package com.eminsasmaz.otoworldd.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.eminsasmaz.otoworldd.R
 import com.eminsasmaz.otoworldd.fragment.HomeFragment
 import com.eminsasmaz.otoworldd.databinding.ActivityHomeScreenBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView

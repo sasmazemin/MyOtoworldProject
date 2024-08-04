@@ -1,5 +1,5 @@
 
-package com.eminsasmaz.otoworldd
+package com.eminsasmaz.otoworldd.view
 
 import android.Manifest
 import android.content.SharedPreferences
@@ -15,6 +15,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.eminsasmaz.otoworldd.R
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -22,10 +23,8 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.eminsasmaz.otoworldd.databinding.ActivityInspectionMapsBinding
-import com.eminsasmaz.otoworldd.databinding.ActivityMapsBinding
-import com.eminsasmaz.otoworldd.model.CarparkModel
-import com.eminsasmaz.otoworldd.model.InspectionModel
+import com.eminsasmaz.otoworldd.databinding.ActivityTowMapsBinding
+import com.eminsasmaz.otoworldd.model.TowModel
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
@@ -34,10 +33,10 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 
-class InspectionMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLongClickListener {
+class TowMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLongClickListener {
 
     private lateinit var mMap: GoogleMap
-    private lateinit var binding: ActivityInspectionMapsBinding
+    private lateinit var binding: ActivityTowMapsBinding
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
     private lateinit var locationManager: LocationManager
@@ -47,12 +46,12 @@ class InspectionMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLong
     private var trackBoolean: Boolean?=null
     private var selectedLatitude:Double?=null
     private var selectedLongitude:Double?=null
-    private lateinit var inspectionArrayList:ArrayList<InspectionModel>
+    private lateinit var towArrayList:ArrayList<TowModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityInspectionMapsBinding.inflate(layoutInflater)
+        binding = ActivityTowMapsBinding.inflate(layoutInflater)
         val view=binding.root
         setContentView(view)
 
@@ -63,6 +62,7 @@ class InspectionMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLong
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
         registerLauncher()
 
         sharedPreferences=this.getSharedPreferences("com.eminsasmaz.otoworldd", MODE_PRIVATE)
@@ -70,15 +70,16 @@ class InspectionMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLong
         selectedLatitude=0.0
         selectedLongitude=0.0
 
-        inspectionArrayList=ArrayList<InspectionModel>()
+        towArrayList=ArrayList<TowModel>()
     }
+
     private fun getData(){
 
-        db.collection("InspectionFirms").addSnapshotListener { value, error ->
+        db.collection("TowFirms").addSnapshotListener { value, error ->
 
             if(error!=null){
                 Toast.makeText(this,"Error occured",Toast.LENGTH_LONG).show()
-                Log.e("InspectionMapsActivity","Error occured",error)
+                Log.e("TowMapsActivity","Error occured",error)
                 return@addSnapshotListener
             }else{
                 if(value!=null){
@@ -86,23 +87,23 @@ class InspectionMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLong
                         val documents= value.documents
 
                         for (document in documents) {
-                            val inspectionAdress = document.getString("inspectionAdress") ?: "No Address"
-                            val inspectionContact = document.getString("inspectionContact") ?: "No Contact"
-                            val inspectionFirmName = document.getString("inspectionFirmName") ?: "No Firm Name"
-                            val inspectionImageUrl = document.getString("inspectionImageUrl") ?: "No Image"
+                            val towAdress = document.getString("towAdress") ?: "No Address"
+                            val towContact = document.getString("towContact") ?: "No Contact"
+                            val towFirmName = document.getString("towFirmName") ?: "No Firm Name"
+                            val towImageUrl = document.getString("towImageUrl") ?: "No Image"
                             val location = document.getGeoPoint("location")
-                            val inspectionPriceList = document.getString("inspectionPriceList") ?: "No Price List"
-                            val inspectionStatus = document.getBoolean("inspectionStatus") ?: false
-                            val inspectionWorkingHours = document.getString("inspectionWorkingHours") ?: "No Working Hours"
+                            val towPriceList = document.getString("towPriceList") ?: "No Price List"
+                            val towStatus = document.getBoolean("towStatus") ?: false
+                            val towWorkingHours = document.getString("towWorkingHours") ?: "No Working Hours"
 
                             if (location != null) {
-                                val inspectionList = InspectionModel(
-                                    inspectionAdress,inspectionContact,inspectionFirmName,inspectionImageUrl,location,
-                                    location.latitude,location.longitude,inspectionPriceList,inspectionStatus,inspectionWorkingHours
+                                val towList = TowModel(
+                                    towAdress,towContact,towFirmName,towImageUrl,location,location.latitude,location.longitude,
+                                    towPriceList,towStatus,towWorkingHours
                                 )
-                                println(inspectionAdress)
-                                inspectionArrayList.add(inspectionList)
-                                mMap.addMarker(MarkerOptions().title(inspectionFirmName).position(LatLng(location.latitude, location.longitude)))
+                                println(towAdress)
+                                towArrayList.add(towList)
+                                mMap.addMarker(MarkerOptions().title(towFirmName).position(LatLng(location.latitude, location.longitude)))
                             }
 
                         }
@@ -120,6 +121,7 @@ class InspectionMapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMapLong
         mMap.setOnMapLongClickListener(this)
 
         getData()
+
         locationManager=this.getSystemService(LOCATION_SERVICE) as LocationManager
 
         locationListener= object : LocationListener{

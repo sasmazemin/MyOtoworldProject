@@ -1,10 +1,9 @@
 
-package com.eminsasmaz.otoworldd
+package com.eminsasmaz.otoworldd.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import com.eminsasmaz.otoworldd.databinding.ActivityOnboarding1Binding
 
 class Onboarding1Activity : AppCompatActivity() {
@@ -15,7 +14,7 @@ class Onboarding1Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         binding.skip1Button.setOnClickListener {
-            val intent=Intent(this,Onboarding2Activity::class.java)
+            val intent=Intent(this, Onboarding2Activity::class.java)
             startActivity(intent)
         }
     }

@@ -27,22 +27,22 @@
     </fragment>
     <activity
         android:id="@+id/mapsActivity"
-        android:name="com.eminsasmaz.otoworldd.MapsActivity"
+        android:name="com.eminsasmaz.otoworldd.view.MapsActivity"
         android:label="activity_maps"
         tools:layout="@layout/activity_maps" />
     <activity
         android:id="@+id/inspectionMapsActivity"
-        android:name="com.eminsasmaz.otoworldd.InspectionMapsActivity"
+        android:name="com.eminsasmaz.otoworldd.view.InspectionMapsActivity"
         android:label="activity_carpark_maps"
         tools:layout="@layout/activity_carpark_maps" />
     <activity
         android:id="@+id/tireMapsActivity"
-        android:name="com.eminsasmaz.otoworldd.TireMapsActivity"
+        android:name="com.eminsasmaz.otoworldd.view.TireMapsActivity"
         android:label="activity_tire_maps"
         tools:layout="@layout/activity_tire_maps" />
     <activity
         android:id="@+id/towMapsActivity"
-        android:name="com.eminsasmaz.otoworldd.TowMapsActivity"
+        android:name="com.eminsasmaz.otoworldd.view.TowMapsActivity"
         android:label="activity_tow_maps"
         tools:layout="@layout/activity_tow_maps" />
 </navigation>

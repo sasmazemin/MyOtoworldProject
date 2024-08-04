@@ -18,7 +18,10 @@
         android:theme="@style/Theme.Otoworldd"
         tools:targetApi="31">
         <activity
-            android:name=".ParkFirmDetailActivity"
+            android:name=".view.InspectionFirmDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ParkFirmDetailActivity"
             android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
@@ -36,41 +39,41 @@
             android:value="AIzaSyBPyN3hfy2dTatcOAjnPpUES3fBReHGCeE" />
 
         <activity
-            android:name=".TowMapsActivity"
+            android:name=".view.TowMapsActivity"
             android:exported="false"
             android:label="@string/title_activity_tow_maps" />
         <activity
-            android:name=".TireMapsActivity"
+            android:name=".view.TireMapsActivity"
             android:exported="false"
             android:label="@string/title_activity_tire_maps" />
         <activity
-            android:name=".InspectionMapsActivity"
+            android:name=".view.InspectionMapsActivity"
             android:exported="false"
             android:label="@string/title_activity_inspection_maps" />
         <activity
-            android:name=".MapsActivity"
+            android:name=".view.MapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />
         <activity
-            android:name=".HomeScreenActivity"
+            android:name=".view.HomeScreenActivity"
             android:exported="false" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".view.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".view.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".Onboarding3Activity"
+            android:name=".view.Onboarding3Activity"
             android:exported="false" />
         <activity
-            android:name=".Onboarding2Activity"
+            android:name=".view.Onboarding2Activity"
             android:exported="false" />
         <activity
-            android:name=".Onboarding1Activity"
+            android:name=".view.Onboarding1Activity"
             android:exported="false" />
         <activity
-            android:name=".WelcomeScreen"
+            android:name=".view.WelcomeScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,5 +1,5 @@
 
-package com.eminsasmaz.otoworldd
+package com.eminsasmaz.otoworldd.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +29,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     fun alreadyHaveClicked(view: View){
-        val intent=Intent(this,LoginActivity::class.java)
+        val intent=Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
     }
@@ -44,7 +44,7 @@ class SignUpActivity : AppCompatActivity() {
             Toast.makeText(this,"Enter email and password!",Toast.LENGTH_LONG).show()
         }else if(confirmPassword==password){
             auth.createUserWithEmailAndPassword(email,password).addOnSuccessListener {
-                val intent =Intent(this,HomeScreenActivity::class.java)
+                val intent =Intent(this, HomeScreenActivity::class.java)
                 startActivity(intent)
                 finish()
             }.addOnFailureListener {
