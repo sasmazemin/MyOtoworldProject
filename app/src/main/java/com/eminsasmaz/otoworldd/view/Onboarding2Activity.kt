@@ -16,14 +16,17 @@ class Onboarding2Activity : AppCompatActivity() {
         binding.nextButton.setOnClickListener {
             val intent=Intent(this, Onboarding3Activity::class.java)
             startActivity(intent)
+            finish()
         }
         binding.skip2Button.setOnClickListener {
             val intent=Intent(this, Onboarding3Activity::class.java)
             startActivity(intent)
+            finish()
         }
         binding.back1Button.setOnClickListener {
             val intent=Intent(this, Onboarding1Activity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 

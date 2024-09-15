@@ -8,6 +8,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.eminsasmaz.otoworldd.R
 import com.eminsasmaz.otoworldd.fragment.HomeFragment
 import com.eminsasmaz.otoworldd.databinding.ActivityHomeScreenBinding
+import com.eminsasmaz.otoworldd.fragment.MyCarsFragment
+import com.eminsasmaz.otoworldd.fragment.SearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HomeScreenActivity : AppCompatActivity() {
@@ -21,13 +23,15 @@ class HomeScreenActivity : AppCompatActivity() {
         setContentView(view)
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView, HomeFragment())
-                .commit()
+            val navController = findNavController(R.id.fragmentContainerView)
+            val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+            // BottomNavigationView ile NavController'ı eşleştir
+            bottomNav.setupWithNavController(navController)
         }
-        var navController=findNavController(R.id.fragmentContainerView)
-        var bottomNav=findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        bottomNav.setupWithNavController(navController)
+
+
+
 
 
 

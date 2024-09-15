@@ -16,6 +16,7 @@ class Onboarding1Activity : AppCompatActivity() {
         binding.skip1Button.setOnClickListener {
             val intent=Intent(this, Onboarding2Activity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 

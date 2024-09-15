@@ -7,14 +7,14 @@
         android:icon="@drawable/home_4_svgrepo_com_1" />
     <item
         android:title="Search"
-        android:id="@+id/searchFragment"
+        android:id="@+id/searchFragment2"
         android:icon="@drawable/search_svgrepo_com_1_footbar" />
     <item
         android:title="My Cars"
-        android:id="@+id/myCarsFragment"
+        android:id="@+id/myCarsFragment2"
         android:icon="@drawable/car_svgrepo_com_2_gray" />
     <item
         android:title="Profile"
-        android:id="@+id/profileFragment"
+        android:id="@+id/profileFragment2"
         android:icon="@drawable/profile_circle_svgrepo_com_1_footbar" />
 </menu>

@@ -16,10 +16,12 @@ class Onboarding3Activity : AppCompatActivity() {
         binding.getStartedButton.setOnClickListener {
             val intent=Intent(this, LoginActivity::class.java)
             startActivity(intent)
+            finish()
         }
         binding.back2Button.setOnClickListener {
             val intent=Intent(this, Onboarding2Activity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 

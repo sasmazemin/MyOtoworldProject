@@ -33,6 +33,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMarkerClickListener {
 
@@ -40,6 +42,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMarkerClickListen
     private lateinit var binding: ActivityMapsBinding
     private lateinit var db:FirebaseFirestore
     private lateinit var auth:FirebaseAuth
+    private lateinit var storage:FirebaseStorage
     private lateinit var locationManager:LocationManager
     private lateinit var locationListener:LocationListener
     private lateinit var permissionLauncher:ActivityResultLauncher<String>
@@ -58,6 +61,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMarkerClickListen
 
         db= Firebase.firestore
         auth=Firebase.auth
+        storage=Firebase.storage
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -71,7 +75,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMarkerClickListen
         trackBoolean=false
         selectedLatitude=0.0
         selectedLongitude=0.0
-
         parkArrayList=ArrayList<CarparkModel>()
 
     }
@@ -89,6 +92,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMarkerClickListen
                         val documents= value.documents
 
                         for (document in documents) {
+                            val parkFirmId=document.id
                             val parkAdress = document.getString("parkAdress") ?: "No Address"
                             val parkContact = document.getString("parkContact") ?: "No Contact"
                             val parkFirmName = document.getString("parkFirmName") ?: "No Firm Name"
@@ -100,15 +104,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMarkerClickListen
 
                             if (location != null) {
                                 val parkList = CarparkModel(
-                                    parkAdress, parkContact, parkFirmName, parkImageUrl, location,
+                                    parkFirmId,parkAdress, parkContact, parkFirmName, parkImageUrl, location,
                                     location.latitude, location.longitude, parkPriceList, parkStatus, parkWorkingHours
                                 )
                                 //println(parkFirmName)
+                                //println(parkFirmId)
+                                //println(parkImageUrl)
                                 parkArrayList.add(parkList)
                                 val marker=mMap.addMarker(
                                     MarkerOptions().title(parkFirmName).position(LatLng(location.latitude,location.longitude))
                                 )
                                 marker?.tag=parkList
+
+
                             }
 
 
@@ -199,6 +207,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMarkerClickListen
             val intent = Intent(this, ParkFirmDetailActivity::class.java)
             intent.putExtra("FIRM", firm)
             startActivity(intent)
+
         } else {
             Toast.makeText(this, "Firm details not found", Toast.LENGTH_SHORT).show()
         }

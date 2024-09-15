@@ -15,34 +15,25 @@
         <action
             android:id="@+id/action_homeFragment_to_mapsActivity"
             app:destination="@id/mapsActivity" />
-        <action
-            android:id="@+id/action_homeFragment_to_inspectionMapsActivity"
-            app:destination="@id/inspectionMapsActivity" />
-        <action
-            android:id="@+id/action_homeFragment_to_tireMapsActivity"
-            app:destination="@id/tireMapsActivity" />
-        <action
-            android:id="@+id/action_homeFragment_to_towMapsActivity"
-            app:destination="@id/towMapsActivity" />
     </fragment>
+    <fragment
+        android:id="@+id/searchFragment2"
+        android:name="com.eminsasmaz.otoworldd.fragment.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/myCarsFragment2"
+        android:name="com.eminsasmaz.otoworldd.fragment.MyCarsFragment"
+        android:label="fragment_my_cars"
+        tools:layout="@layout/fragment_my_cars" />
+    <fragment
+        android:id="@+id/profileFragment2"
+        android:name="com.eminsasmaz.otoworldd.fragment.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
     <activity
         android:id="@+id/mapsActivity"
         android:name="com.eminsasmaz.otoworldd.view.MapsActivity"
         android:label="activity_maps"
         tools:layout="@layout/activity_maps" />
-    <activity
-        android:id="@+id/inspectionMapsActivity"
-        android:name="com.eminsasmaz.otoworldd.view.InspectionMapsActivity"
-        android:label="activity_carpark_maps"
-        tools:layout="@layout/activity_carpark_maps" />
-    <activity
-        android:id="@+id/tireMapsActivity"
-        android:name="com.eminsasmaz.otoworldd.view.TireMapsActivity"
-        android:label="activity_tire_maps"
-        tools:layout="@layout/activity_tire_maps" />
-    <activity
-        android:id="@+id/towMapsActivity"
-        android:name="com.eminsasmaz.otoworldd.view.TowMapsActivity"
-        android:label="activity_tow_maps"
-        tools:layout="@layout/activity_tow_maps" />
 </navigation>

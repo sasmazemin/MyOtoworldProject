@@ -7,9 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.eminsasmaz.otoworldd.R
+import com.eminsasmaz.otoworldd.databinding.FragmentHomeBinding
+import com.eminsasmaz.otoworldd.databinding.FragmentMyCarsBinding
 
 
 class MyCarsFragment : Fragment() {
+    private lateinit var binding:FragmentMyCarsBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +25,13 @@ class MyCarsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_cars, container, false)
+        binding= FragmentMyCarsBinding.inflate(inflater,container,false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
     }
 
 

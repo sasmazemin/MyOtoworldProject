@@ -195,6 +195,7 @@ class InspectionMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarker
             val intent = Intent(this, InspectionFirmDetailActivity::class.java)
             intent.putExtra("FIRM", firm)
             startActivity(intent)
+
         } else {
             Toast.makeText(this, "Firm details not found", Toast.LENGTH_SHORT).show()
         }

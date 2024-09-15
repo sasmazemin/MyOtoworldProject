@@ -199,6 +199,7 @@ class TireMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickL
             val intent = Intent(this, TireFirmDetailActivity::class.java)
             intent.putExtra("FIRM", firm)
             startActivity(intent)
+
         } else {
             Toast.makeText(this, "Firm details not found", Toast.LENGTH_SHORT).show()
         }

@@ -199,6 +199,7 @@ class TowMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickLi
             val intent = Intent(this, TowFirmDetailActivity::class.java)
             intent.putExtra("FIRM", firm)
             startActivity(intent)
+
         } else {
             Toast.makeText(this, "Firm details not found", Toast.LENGTH_SHORT).show()
         }

@@ -148,6 +148,7 @@
         android:layout_marginStart="8dp"
         android:text="Make An Appointment"
         android:textSize="16dp"
+        android:textColor="@color/mainColor"
         app:layout_constraintStart_toEndOf="@+id/imageView44"
         app:layout_constraintTop_toTopOf="@+id/imageView44" />
 

@@ -5,6 +5,7 @@ import android.os.Parcelable
 import com.google.firebase.firestore.GeoPoint
 
 data class CarparkModel(
+    val parkFirmId:String,
     val parkAddress: String,
     val parkContact: String,
     val parkFirmName: String,
@@ -21,6 +22,7 @@ data class CarparkModel(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
+        parcel.readString() ?: "",
         GeoPoint(parcel.readDouble(), parcel.readDouble()),
         parcel.readDouble(),
         parcel.readDouble(),
@@ -30,6 +32,7 @@ data class CarparkModel(
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(parkFirmId)
         parcel.writeString(parkAddress)
         parcel.writeString(parkContact)
         parcel.writeString(parkFirmName)
