@@ -7,10 +7,9 @@ import android.widget.Toast
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
-import com.eminsasmaz.otoworldd.DateTimePickerFragment
+import com.eminsasmaz.otoworldd.fragment.DateTimePickerFragment
 import com.eminsasmaz.otoworldd.R
 import com.eminsasmaz.otoworldd.databinding.ActivityTowFirmDetailBinding
-import com.eminsasmaz.otoworldd.model.TireModel
 import com.eminsasmaz.otoworldd.model.TowModel
 import java.text.SimpleDateFormat
 import java.util.Calendar

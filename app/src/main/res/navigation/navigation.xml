@@ -20,12 +20,26 @@
         android:id="@+id/searchFragment2"
         android:name="com.eminsasmaz.otoworldd.fragment.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" ></fragment>
     <fragment
         android:id="@+id/myCarsFragment2"
         android:name="com.eminsasmaz.otoworldd.fragment.MyCarsFragment"
         android:label="fragment_my_cars"
-        tools:layout="@layout/fragment_my_cars" />
+        tools:layout="@layout/fragment_my_cars">
+
+        <action
+            android:id="@+id/action_myCarsFragment2_to_detailMyCarsFragment2"
+            app:destination="@id/detailMyCarsFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailMyCarsFragment2"
+        android:name="com.eminsasmaz.otoworldd.fragment.DetailMyCarsFragment"
+        android:label="fragment_detail_my_cars"
+        tools:layout="@layout/fragment_detail_my_cars">
+        <argument
+            android:name="selectedCar"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment2"
         android:name="com.eminsasmaz.otoworldd.fragment.ProfileFragment"

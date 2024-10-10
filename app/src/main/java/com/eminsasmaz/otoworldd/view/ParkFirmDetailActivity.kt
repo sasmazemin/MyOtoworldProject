@@ -7,7 +7,7 @@ import android.widget.Toast
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
-import com.eminsasmaz.otoworldd.DateTimePickerFragment
+import com.eminsasmaz.otoworldd.fragment.DateTimePickerFragment
 import com.eminsasmaz.otoworldd.R
 import com.eminsasmaz.otoworldd.databinding.ActivityParkFirmDetailBinding
 import com.eminsasmaz.otoworldd.model.CarparkModel
@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class ParkFirmDetailActivity : AppCompatActivity(),DateTimePickerFragment.DateTimePickerListener {
+class ParkFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateTimePickerListener {
     private lateinit var binding:ActivityParkFirmDetailBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

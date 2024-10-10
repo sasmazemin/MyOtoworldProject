@@ -7,16 +7,15 @@ import android.widget.Toast
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
-import com.eminsasmaz.otoworldd.DateTimePickerFragment
+import com.eminsasmaz.otoworldd.fragment.DateTimePickerFragment
 import com.eminsasmaz.otoworldd.R
 import com.eminsasmaz.otoworldd.databinding.ActivityTireFirmDetailBinding
-import com.eminsasmaz.otoworldd.model.InspectionModel
 import com.eminsasmaz.otoworldd.model.TireModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class TireFirmDetailActivity : AppCompatActivity(),DateTimePickerFragment.DateTimePickerListener {
+class TireFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateTimePickerListener {
     private lateinit var binding:ActivityTireFirmDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -5,10 +5,23 @@
     android:layout_height="match_parent"
     tools:context=".fragment.MyCarsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mycarsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="my cars" />
+        android:layout_marginBottom="56dp" /> <!-- Butonun alanını bırakmak için margin ekliyoruz -->
+
+    <!-- Buton (her zaman en altta sabit kalacak) -->
+    <Button
+        android:id="@+id/addVehicleButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/mainColor"
+        android:text="Add Vehicle"
+        android:textColor="@android:color/white" />
+
 
 </FrameLayout>
