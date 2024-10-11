@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Araç Plakası -->
+    <EditText
+        android:id="@+id/licensePlateEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="License Plate"
+        android:inputType="text" />
+
+    <!-- Araç Markası -->
+    <EditText
+        android:id="@+id/brandEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Brand"
+        android:inputType="text"
+        android:layout_marginTop="20dp"/>
+
+    <!-- Araç Modeli -->
+    <EditText
+        android:id="@+id/modelEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Model"
+        android:inputType="text"
+        android:layout_marginTop="20dp"/>
+
+    <!-- Update ve Delete Butonlarını Yana Yana Koyan LinearLayout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <!-- Update Butonu -->
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="SAVE"
+            android:backgroundTint="@color/mainColor"
+            android:layout_marginTop="20dp"/>
+
+        <!-- Delete Butonu -->
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="CANCEL"
+            android:backgroundTint="@color/mainColor"
+            android:layout_marginTop="20dp"/>
+    </LinearLayout>
+
+</LinearLayout>
