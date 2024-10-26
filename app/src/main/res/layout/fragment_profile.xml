@@ -10,12 +10,11 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:layout_marginTop="15dp"
         android:background="@color/mainColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <androidx.cardview.widget.CardView
@@ -36,19 +35,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imageView46"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_marginStart="5dp"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/profilephoto" />
+                app:shapeAppearanceOverlay="@style/circular"
+                app:srcCompat="@drawable/profilephoto" /> <!-- Fotoğrafı yuvarlak şekle uygun keser -->
 
             <TextView
                 android:id="@+id/textView14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="40dp"
                 android:fontFamily="@font/roboto_bold"
                 android:text="Muhammed Emin Şaşmaz"
@@ -58,12 +61,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 android:text="emin@gmail.com"
                 app:layout_constraintStart_toEndOf="@+id/imageView46"
                 app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
             <ImageView
+                android:id="@+id/goToMyAccount"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_marginTop="20dp"

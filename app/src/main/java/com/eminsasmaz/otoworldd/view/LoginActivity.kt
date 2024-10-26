@@ -32,7 +32,6 @@ class LoginActivity : AppCompatActivity() {
                 }
          */
 
-
     }
     fun dontHaveClicked(view: View){
         val intent=Intent(this@LoginActivity, SignUpActivity::class.java)

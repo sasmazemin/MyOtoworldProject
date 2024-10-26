@@ -11,6 +11,8 @@ import com.eminsasmaz.otoworldd.fragment.DateTimePickerFragment
 import com.eminsasmaz.otoworldd.R
 import com.eminsasmaz.otoworldd.databinding.ActivityParkFirmDetailBinding
 import com.eminsasmaz.otoworldd.model.CarparkModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -107,9 +109,10 @@ class ParkFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateT
         } ?: run {
             Toast.makeText(this, "Firm details not found", Toast.LENGTH_SHORT).show()
         }
-}
+    }
 
     override fun onDateTimeSelected(date: String, time: String) {
         Toast.makeText(this, "Seçilen Tarih: $date, Seçilen Saat: $time", Toast.LENGTH_SHORT).show()
     }
 }
+

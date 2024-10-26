@@ -74,15 +74,15 @@ class DetailMyCarsFragment : Fragment() {
 
                 vehiclesCollection.add(vehicle)
                     .addOnSuccessListener {
-                        Toast.makeText(requireContext(), "Araç kaydedildi!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Vehicle saved", Toast.LENGTH_SHORT).show()
                         findNavController().popBackStack() // Ekleme sonrası geri git
                     }
                     .addOnFailureListener { e ->
-                        Toast.makeText(requireContext(), "Hata: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
                     }
             }
         } else {
-            Toast.makeText(requireContext(), "Lütfen tüm bilgileri doldurun!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Please fill in all information", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -126,15 +126,15 @@ class DetailMyCarsFragment : Fragment() {
 
                 vehicleRef.set(updatedVehicle)
                     .addOnSuccessListener {
-                        Toast.makeText(requireContext(), "Araç güncellendi!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Vehicle Updated", Toast.LENGTH_SHORT).show()
                         findNavController().popBackStack()
                     }
                     .addOnFailureListener { e ->
-                        Toast.makeText(requireContext(), "Hata: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
                     }
             }
         } else {
-            Toast.makeText(requireContext(), "Lütfen tüm bilgileri doldurun!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Please fill in all information", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -149,11 +149,11 @@ class DetailMyCarsFragment : Fragment() {
 
             vehicleRef.delete()
                 .addOnSuccessListener {
-                    Toast.makeText(requireContext(), "Araç silindi!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Vehicle deleted", Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(requireContext(), "Hata: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
                 }
         }
     }

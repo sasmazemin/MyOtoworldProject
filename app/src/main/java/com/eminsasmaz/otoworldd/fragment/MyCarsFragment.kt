@@ -80,13 +80,14 @@ class MyCarsFragment : Fragment() {
                         // Hata durumunda
                         Toast.makeText(context, "Hata: ${exception.localizedMessage}", Toast.LENGTH_SHORT).show()
                     }
+                binding.addVehicleButton.setOnClickListener{
+                    // Yeni araç eklemek için DetailMyCarsFragment'a yönlendir
+                    val action = MyCarsFragmentDirections.actionMyCarsFragment2ToDetailMyCarsFragment2("")
+                    findNavController().navigate(action)
+                }
             }
         }
-        binding.addVehicleButton.setOnClickListener{
-            // Yeni araç eklemek için DetailMyCarsFragment'a yönlendir
-            val action = MyCarsFragmentDirections.actionMyCarsFragment2ToDetailMyCarsFragment2("")
-            findNavController().navigate(action)
-        }
+
 
 
 
