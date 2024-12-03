@@ -16,7 +16,17 @@ class DateTimePickerFragment : DialogFragment() {
     private var listener: DateTimePickerListener? = null
 
     interface DateTimePickerListener {
-        fun onDateTimeSelected(date: String, time: String)
+        fun onDateTimeSelected(date: String, time: String, firmName: String, firmPhotoUrl: String, vehiclePlate: String)
+    }
+
+    private var firmName: String? = null
+    private var firmPhotoUrl: String? = null
+    private var vehiclePlate: String? = null
+
+    fun setFirmData(name: String, photoUrl: String, plate: String) {
+        firmName = name
+        firmPhotoUrl = photoUrl
+        vehiclePlate = plate
     }
 
     override fun onCreateView(
@@ -38,7 +48,14 @@ class DateTimePickerFragment : DialogFragment() {
             val selectedDate = "${datePicker.dayOfMonth}/${datePicker.month + 1}/${datePicker.year}"
             val selectedTime = "${timePicker.hour}:${timePicker.minute}"
 
-            listener?.onDateTimeSelected(selectedDate, selectedTime)
+            // Tüm bilgileri dinleyiciye gönder
+            listener?.onDateTimeSelected(
+                selectedDate,
+                selectedTime,
+                firmName ?: "", // firmName, null ise boş string
+                firmPhotoUrl ?: "", // firmPhotoUrl, null ise boş string
+                vehiclePlate ?: "" // vehiclePlate, null ise boş string
+            )
             dismiss()
         }
 

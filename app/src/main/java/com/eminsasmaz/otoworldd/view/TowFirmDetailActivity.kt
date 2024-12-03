@@ -107,8 +107,13 @@ class TowFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateTi
             Toast.makeText(this, "Firm details not found", Toast.LENGTH_SHORT).show()
         }
     }
-
-    override fun onDateTimeSelected(date: String, time: String) {
+    override fun onDateTimeSelected(
+        date: String,
+        time: String,
+        firmName: String,
+        firmPhotoUrl: String,
+        vehiclePlate: String
+    ) {
         Toast.makeText(this, "Seçilen Tarih: $date, Seçilen Saat: $time", Toast.LENGTH_SHORT).show()
     }
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.eminsasmaz.otoworldd.R
 import com.eminsasmaz.otoworldd.databinding.FragmentMyAccountBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -33,6 +34,10 @@ class MyAccountFragment : Fragment() {
 
         val currentUser = auth.currentUser
         val userId = currentUser?.uid
+
+        binding.imageView47.setOnClickListener {
+            findNavController().navigate(R.id.action_myAccountFragment_to_profileFragment2)
+        }
 
         if (userId != null) {
             // Kullanıcı verilerini Firestore'dan çek

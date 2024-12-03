@@ -55,6 +55,9 @@
         <action
             android:id="@+id/action_profileFragment2_to_reservationFragment"
             app:destination="@id/reservationFragment" />
+        <action
+            android:id="@+id/action_profileFragment2_to_myCarsFragment2"
+            app:destination="@id/myCarsFragment2" />
     </fragment>
 
     <!-- MyAccountFragment'ı ekliyoruz -->
@@ -62,7 +65,11 @@
         android:id="@+id/myAccountFragment"
         android:name="com.eminsasmaz.otoworldd.fragment.MyAccountFragment"
         android:label="fragment_my_account"
-        tools:layout="@layout/fragment_my_account" />
+        tools:layout="@layout/fragment_my_account" >
+        <action
+            android:id="@+id/action_myAccountFragment_to_profileFragment2"
+            app:destination="@id/profileFragment2" />
+    </fragment>
 
     <activity
         android:id="@+id/mapsActivity"

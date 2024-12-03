@@ -66,6 +66,7 @@
         android:inputType="textEmailAddress"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
+        android:password="true"
         app:layout_constraintStart_toStartOf="@+id/emailText"
         app:layout_constraintTop_toBottomOf="@+id/emailText" />
 
@@ -82,6 +83,7 @@
         android:inputType="textEmailAddress"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
+        android:password="true"
         app:layout_constraintEnd_toEndOf="@+id/passwordText"
         app:layout_constraintStart_toStartOf="@+id/passwordText"
         app:layout_constraintTop_toBottomOf="@+id/passwordText" />

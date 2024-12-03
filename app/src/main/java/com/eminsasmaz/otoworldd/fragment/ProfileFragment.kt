@@ -56,6 +56,10 @@ class ProfileFragment : Fragment() {
                     findNavController().navigate(R.id.action_profileFragment2_to_myAccountFragment)
                 }
             }
+            if(position==1){
+                //My Cars'a tıklandığında
+                findNavController().navigate(R.id.action_profileFragment2_to_myCarsFragment2)
+            }
             if(position==3){
                 //Reservation'a tıklandıysa
                 findNavController().navigate(R.id.action_profileFragment2_to_reservationFragment)
