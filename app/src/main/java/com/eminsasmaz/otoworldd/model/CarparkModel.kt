@@ -1,5 +1,3 @@
-package com.eminsasmaz.otoworldd.model
-
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.firestore.GeoPoint
@@ -15,7 +13,11 @@ data class CarparkModel(
     val parkLongitude: Double,
     val parkPriceList: String,
     val parkStatus: Boolean,
-    val parkWorkingHours: String
+    val parkWorkingHours: String,
+    val parkMail: String,
+    val parkPassword: String,
+    val parkType: String,
+    val userType:String
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
@@ -28,7 +30,12 @@ data class CarparkModel(
         parcel.readDouble(),
         parcel.readString() ?: "",
         parcel.readByte() != 0.toByte(),
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
         parcel.readString() ?: ""
+
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -44,6 +51,10 @@ data class CarparkModel(
         parcel.writeString(parkPriceList)
         parcel.writeByte(if (parkStatus) 1 else 0)
         parcel.writeString(parkWorkingHours)
+        parcel.writeString(parkMail)
+        parcel.writeString(parkPassword)
+        parcel.writeString(parkType)
+        parcel.writeString(userType)
     }
 
     override fun describeContents(): Int {

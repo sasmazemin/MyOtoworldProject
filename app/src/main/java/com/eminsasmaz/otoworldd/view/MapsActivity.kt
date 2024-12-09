@@ -1,5 +1,6 @@
 package com.eminsasmaz.otoworldd.view
 
+import CarparkModel
 import android.Manifest
 import android.content.Intent
 import android.content.SharedPreferences
@@ -24,7 +25,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.eminsasmaz.otoworldd.databinding.ActivityMapsBinding
-import com.eminsasmaz.otoworldd.model.CarparkModel
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.model.Marker
 import com.google.android.material.snackbar.Snackbar
@@ -93,7 +93,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMarkerClickListen
 
                         for (document in documents) {
                             val parkFirmId=document.id
-                            val parkAdress = document.getString("parkAdress") ?: "No Address"
+                            val parkAddress = document.getString("parkAddress") ?: "No Address"
                             val parkContact = document.getString("parkContact") ?: "No Contact"
                             val parkFirmName = document.getString("parkFirmName") ?: "No Firm Name"
                             val parkImageUrl = document.getString("parkImageUrl") ?: "No Image"
@@ -101,11 +101,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMarkerClickListen
                             val parkPriceList = document.getString("parkPriceList") ?: "No Price List"
                             val parkStatus = document.getBoolean("parkStatus") ?: false
                             val parkWorkingHours = document.getString("parkWorkingHours") ?: "No Working Hours"
+                            val parkMail = document.getString("parkMail") ?: "No Park Mail"
+                            val parkPassword = document.getString("parkPassword") ?: "No Park Password"
+                            val parkType = document.getString("parkType") ?: "No Park Type"
+                            val userType = document.getString("userType") ?: "No User Type"
 
                             if (location != null) {
                                 val parkList = CarparkModel(
-                                    parkFirmId,parkAdress, parkContact, parkFirmName, parkImageUrl, location,
-                                    location.latitude, location.longitude, parkPriceList, parkStatus, parkWorkingHours
+                                    parkFirmId,parkAddress, parkContact, parkFirmName, parkImageUrl, location,
+                                    location.latitude, location.longitude, parkPriceList, parkStatus, parkWorkingHours,parkMail,parkPassword,parkType,userType
                                 )
                                 //println(parkFirmName)
                                 //println(parkFirmId)

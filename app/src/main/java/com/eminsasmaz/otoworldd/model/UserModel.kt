@@ -9,5 +9,6 @@ data class UserModel (
     val userLocation: String = "",
     val userName: String,
     val userPhone: String = "",
-    val vehicleCount: Int = 0
+    val vehicleCount: Int = 0,
+    val userType: String = ""
     )

@@ -14,7 +14,10 @@ data class TireModel (
     val tireLongitude: Double,
     val tirePriceList: String,
     val tireStatus: Boolean,
-    val tireWorkingHours: String
+    val tireWorkingHours: String,
+    val tireMail: String,
+    val tirePassword: String,
+    val tireType: String
 ):Parcelable{
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
@@ -26,6 +29,9 @@ data class TireModel (
         parcel.readDouble(),
         parcel.readString() ?: "",
         parcel.readByte() != 0.toByte(),
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
         parcel.readString() ?: ""
     )
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -40,6 +46,9 @@ data class TireModel (
         parcel.writeString(tirePriceList)
         parcel.writeByte(if (tireStatus) 1 else 0)
         parcel.writeString(tireWorkingHours)
+        parcel.writeString(tireMail)
+        parcel.writeString(tirePassword)
+        parcel.writeString(tireType)
     }
     override fun describeContents(): Int {
         return 0

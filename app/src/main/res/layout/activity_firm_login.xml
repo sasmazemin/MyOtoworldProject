@@ -8,18 +8,6 @@
     tools:context=".view.LoginActivity">
 
     <TextView
-        android:id="@+id/firmLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:onClick="firmLoginClicked"
-        android:text="Sign In."
-        android:textColor="@color/mainColor"
-        android:textSize="16dp"
-        app:layout_constraintStart_toEndOf="@+id/textViewCompanyOwner"
-        app:layout_constraintTop_toTopOf="@+id/textViewCompanyOwner" />
-
-    <TextView
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/emailLoginText"
+        android:id="@+id/firmEmailLoginText"
         android:layout_width="328dp"
         android:layout_height="54dp"
         android:layout_marginTop="40dp"
@@ -49,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <EditText
-        android:id="@+id/passwordLoginText"
+        android:id="@+id/firmPasswordLoginText"
         android:layout_width="328dp"
         android:layout_height="54dp"
         android:layout_marginTop="40dp"
@@ -61,9 +49,9 @@
         android:inputType="textPassword"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/emailLoginText"
-        app:layout_constraintStart_toStartOf="@+id/emailLoginText"
-        app:layout_constraintTop_toBottomOf="@+id/emailLoginText" />
+        app:layout_constraintEnd_toEndOf="@+id/firmEmailLoginText"
+        app:layout_constraintStart_toStartOf="@+id/firmEmailLoginText"
+        app:layout_constraintTop_toBottomOf="@+id/firmEmailLoginText" />
 
     <TextView
         android:id="@+id/textView9"
@@ -73,17 +61,17 @@
         android:text="Forgot password?"
         android:textColor="@color/mainColor"
         android:textSize="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/passwordLoginText"
-        app:layout_constraintTop_toBottomOf="@+id/passwordLoginText" />
+        app:layout_constraintEnd_toEndOf="@+id/firmPasswordLoginText"
+        app:layout_constraintTop_toBottomOf="@+id/firmPasswordLoginText" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/signInClicked"
+        android:id="@+id/FirmSignInClicked"
         android:layout_width="328dp"
         android:layout_height="56dp"
         android:layout_marginTop="40dp"
         android:background="@drawable/maincolorbutton"
         android:fontFamily="@font/roboto_bold"
-        android:onClick="signInClicked"
+        android:onClick="firmSignInClicked"
         android:text="SIGN IN"
         android:textColor="@color/white"
         android:textSize="14dp"
@@ -100,34 +88,23 @@
         android:text="Dont Have An Account?"
         android:textColor="@color/textColor2"
         android:textSize="16dp"
-        app:layout_constraintStart_toStartOf="@+id/signInClicked"
-        app:layout_constraintTop_toBottomOf="@+id/signInClicked" />
+        app:layout_constraintStart_toStartOf="@+id/FirmSignInClicked"
+        app:layout_constraintTop_toBottomOf="@+id/FirmSignInClicked" />
 
     <TextView
-        android:id="@+id/dontHaveButton"
+        android:id="@+id/dontHaveFirmButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginTop="40dp"
-        android:onClick="dontHaveClicked"
+        android:onClick="dontHaveFirmClicked"
         android:text="Sign Up."
         android:textColor="@color/mainColor"
         android:textSize="16dp"
         app:layout_constraintStart_toEndOf="@+id/textView10"
-        app:layout_constraintTop_toBottomOf="@+id/signInClicked" />
+        app:layout_constraintTop_toBottomOf="@+id/FirmSignInClicked" />
 
     <!-- Yeni Firma Sahibi Misin? Firma Olarak Giriş Yap -->
-    <TextView
-        android:id="@+id/textViewCompanyOwner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/regular_font"
-        android:text="Are you a Company Owner?"
-        android:textColor="@color/textColor2"
-        android:textSize="16dp"
-        app:layout_constraintStart_toStartOf="@+id/textView10"
-        app:layout_constraintTop_toBottomOf="@+id/dontHaveButton" />
 
     <!-- Sosyal medya giriş ikonları -->
     <ImageView
@@ -137,27 +114,25 @@
         android:layout_marginStart="80dp"
         android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewCompanyOwner"
+        app:layout_constraintTop_toBottomOf="@+id/textView10"
         app:srcCompat="@drawable/facebook" />
 
     <ImageView
         android:id="@+id/imageView13"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewCompanyOwner"
+        app:layout_constraintTop_toTopOf="@+id/imageView12"
         app:srcCompat="@drawable/twitter" />
 
     <ImageView
         android:id="@+id/imageView14"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_marginTop="40dp"
         android:layout_marginEnd="80dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewCompanyOwner"
+        app:layout_constraintTop_toTopOf="@+id/imageView13"
         app:srcCompat="@drawable/google" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

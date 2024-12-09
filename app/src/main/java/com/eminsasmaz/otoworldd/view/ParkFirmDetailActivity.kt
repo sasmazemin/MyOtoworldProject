@@ -1,5 +1,6 @@
 package com.eminsasmaz.otoworldd.view
 
+import CarparkModel
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,7 +14,6 @@ import com.denzcoskun.imageslider.models.SlideModel
 import com.eminsasmaz.otoworldd.fragment.DateTimePickerFragment
 import com.eminsasmaz.otoworldd.R
 import com.eminsasmaz.otoworldd.databinding.ActivityParkFirmDetailBinding
-import com.eminsasmaz.otoworldd.model.CarparkModel
 import com.eminsasmaz.otoworldd.model.Vehicle
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

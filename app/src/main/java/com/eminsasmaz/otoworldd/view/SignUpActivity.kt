@@ -110,7 +110,8 @@ class SignUpActivity : AppCompatActivity() {
                 val userModel = UserModel(
                     createdAt = createdAt,
                     userEmail = email,
-                    userName = userName
+                    userName = userName,
+                    userType = "user" // Kullanıcı türünü ekle
                 )
 
                 // Firestore'da kullanıcı bilgilerini kaydet
@@ -131,6 +132,7 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 }
+
 
 
 

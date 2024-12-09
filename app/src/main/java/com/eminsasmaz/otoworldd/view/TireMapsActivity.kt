@@ -98,11 +98,14 @@ class TireMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickL
                             val tirePriceList = document.getString("tirePriceList") ?: "No Price List"
                             val tireStatus = document.getBoolean("tireStatus") ?: false
                             val tireWorkingHours = document.getString("tireWorkingHours") ?: "No Working Hours"
+                            val tireMail = document.getString("tireMail") ?: "No Mail"
+                            val tirePassword = document.getString("tirePassword") ?: "No Password"
+                            val tireType = document.getString("tireType") ?: "No Type"
 
                             if (location != null) {
                                 val tireList = TireModel(
                                     tireAdress,tireContact,tireFirmName,tireImageUrl,location,location.latitude,location.longitude,
-                                    tirePriceList,tireStatus,tireWorkingHours
+                                    tirePriceList,tireStatus,tireWorkingHours,tireMail,tirePassword,tireType
                                 )
                                 //println(tireAdress)
                                 tireArrayList.add(tireList)
