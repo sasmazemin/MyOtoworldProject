@@ -5,7 +5,8 @@ import android.os.Parcelable
 import com.google.firebase.firestore.GeoPoint
 
 data class InspectionModel (
-    val inspectionAdress: String,
+    val inspectionFirmId:String,
+    val inspectionAddress: String,
     val inspectionContact: String,
     val inspectionFirmName: String,
     val inspectionImageUrl: String,
@@ -14,9 +15,14 @@ data class InspectionModel (
     val inspectionLongitude: Double,
     val inspectionPriceList: String,
     val inspectionStatus: Boolean,
-    val inspectionWorkingHours: String
+    val inspectionWorkingHours: String,
+    val inspectionMail: String,
+    val inspectionPassword: String,
+    val parkType: String,
+    val userType:String
 ) : Parcelable{
     constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
@@ -26,10 +32,17 @@ data class InspectionModel (
         parcel.readDouble(),
         parcel.readString() ?: "",
         parcel.readByte() != 0.toByte(),
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
         parcel.readString() ?: ""
+
     )
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(inspectionAdress)
+        parcel.writeString(inspectionFirmId)
+        parcel.writeString(inspectionAddress)
         parcel.writeString(inspectionContact)
         parcel.writeString(inspectionFirmName)
         parcel.writeString(inspectionImageUrl)
@@ -40,10 +53,16 @@ data class InspectionModel (
         parcel.writeString(inspectionPriceList)
         parcel.writeByte(if (inspectionStatus) 1 else 0)
         parcel.writeString(inspectionWorkingHours)
+        parcel.writeString(inspectionMail)
+        parcel.writeString(inspectionPassword)
+        parcel.writeString(parkType)
+        parcel.writeString(userType)
     }
+
     override fun describeContents(): Int {
         return 0
     }
+
     companion object CREATOR : Parcelable.Creator<InspectionModel> {
         override fun createFromParcel(parcel: Parcel): InspectionModel {
             return InspectionModel(parcel)

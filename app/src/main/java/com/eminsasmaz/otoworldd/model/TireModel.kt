@@ -5,7 +5,8 @@ import android.os.Parcelable
 import com.google.firebase.firestore.GeoPoint
 
 data class TireModel (
-    val tireAdress: String,
+    val tireFirmId:String,
+    val tireAddress: String,
     val tireContact: String,
     val tireFirmName: String,
     val tireImageUrl: String,
@@ -17,9 +18,11 @@ data class TireModel (
     val tireWorkingHours: String,
     val tireMail: String,
     val tirePassword: String,
-    val tireType: String
+    val parkType: String,
+    val userType:String
 ):Parcelable{
     constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
@@ -32,10 +35,14 @@ data class TireModel (
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
+        parcel.readString() ?: "",
         parcel.readString() ?: ""
+
     )
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(tireAdress)
+        parcel.writeString(tireFirmId)
+        parcel.writeString(tireAddress)
         parcel.writeString(tireContact)
         parcel.writeString(tireFirmName)
         parcel.writeString(tireImageUrl)
@@ -48,11 +55,14 @@ data class TireModel (
         parcel.writeString(tireWorkingHours)
         parcel.writeString(tireMail)
         parcel.writeString(tirePassword)
-        parcel.writeString(tireType)
+        parcel.writeString(parkType)
+        parcel.writeString(userType)
     }
+
     override fun describeContents(): Int {
         return 0
     }
+
     companion object CREATOR : Parcelable.Creator<TireModel> {
         override fun createFromParcel(parcel: Parcel): TireModel {
             return TireModel(parcel)

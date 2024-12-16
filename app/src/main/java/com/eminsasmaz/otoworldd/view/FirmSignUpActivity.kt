@@ -114,10 +114,6 @@ class FirmSignUpActivity : AppCompatActivity() {
                     val user = auth.currentUser
                     val firmName = binding.firmNameText.text.toString().trim()
                     val firmType = binding.firmTypeSpinner.selectedItem.toString()
-                    val firmAddress = binding.firmAdressText.text.toString().trim()
-                    val firmPhone = binding.firmPhoneText.text.toString().trim()
-                    val firmWorkingHours = binding.firmWorkingHourText.text.toString().trim()
-                    val firmPriceList = binding.firmPriceListText.text.toString().trim()
                     val latitude = binding.firmLatitudeText.text.toString().toDoubleOrNull()
                     val longitude = binding.firmLongitudeText.text.toString().toDoubleOrNull()
 
@@ -125,29 +121,74 @@ class FirmSignUpActivity : AppCompatActivity() {
                         GeoPoint(latitude, longitude)
                     } else null
 
-                    val firmData = hashMapOf(
-                        "userType" to "Firm",
-                        "parkFirmName" to firmName,
-                        "parkType" to firmType,
-                        "parkAddress" to firmAddress,
-                        "parkContact" to firmPhone,
-                        "parkWorkingHours" to firmWorkingHours,
-                        "parkPriceList" to firmPriceList,
-                        "location" to location,
-                        "parkMail" to email,
-                        "parkPassword" to password,
-                        "parkStatus" to true
-                    )
+                    val firmData = when (firmType) {
+                        "CarparkFirms" -> hashMapOf(
+                            "userType" to "Firm",
+                            "parkFirmName" to firmName,
+                            "parkAddress" to binding.firmAdressText.text.toString().trim(),
+                            "parkContact" to binding.firmPhoneText.text.toString().trim(),
+                            "parkWorkingHours" to binding.firmWorkingHourText.text.toString().trim(),
+                            "parkPriceList" to binding.firmPriceListText.text.toString().trim(),
+                            "location" to location,
+                            "parkMail" to email,
+                            "parkPassword" to password,
+                            "parkStatus" to true
+                        )
+                        "InspectionFirms" -> hashMapOf(
+                            "userType" to "Firm",
+                            "inspectionFirmName" to firmName,
+                            "inspectionAddress" to binding.firmAdressText.text.toString().trim(),
+                            "inspectionContact" to binding.firmPhoneText.text.toString().trim(),
+                            "inspectionWorkingHours" to binding.firmWorkingHourText.text.toString().trim(),
+                            "inspectionPriceList" to binding.firmPriceListText.text.toString().trim(),
+                            "location" to location,
+                            "inspectionMail" to email,
+                            "inspectionPassword" to password,
+                            "inspectionStatus" to true,
+                            "parkType" to "Inspection"
+                        )
+                        "TireFirms" -> hashMapOf(
+                            "userType" to "Firm",
+                            "tireFirmName" to firmName,
+                            "tireAddress" to binding.firmAdressText.text.toString().trim(),
+                            "tireContact" to binding.firmPhoneText.text.toString().trim(),
+                            "tireWorkingHours" to binding.firmWorkingHourText.text.toString().trim(),
+                            "tirePriceList" to binding.firmPriceListText.text.toString().trim(),
+                            "location" to location,
+                            "tireMail" to email,
+                            "tirePassword" to password,
+                            "tireStatus" to true,
+                            "parkType" to "Tire"
+                        )
+                        "TowFirms" -> hashMapOf(
+                            "userType" to "Firm",
+                            "towFirmName" to firmName,
+                            "towAddress" to binding.firmAdressText.text.toString().trim(),
+                            "towContact" to binding.firmPhoneText.text.toString().trim(),
+                            "towWorkingHours" to binding.firmWorkingHourText.text.toString().trim(),
+                            "towPriceList" to binding.firmPriceListText.text.toString().trim(),
+                            "location" to location,
+                            "towMail" to email,
+                            "towPassword" to password,
+                            "towStatus" to true,
+                            "parkType" to "Tow"
+                        )
+                        else -> null
+                    }
 
-                    val firmRef = firestore.collection(firmType).document(user!!.uid)
+                    if (firmData != null) {
+                        val firmRef = firestore.collection(firmType).document(user!!.uid)
 
-                    firmRef.set(firmData)
-                        .addOnSuccessListener {
-                            uploadImageToFirebase(firmType, firmName, user.uid)
-                        }
-                        .addOnFailureListener { e ->
-                            Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-                        }
+                        firmRef.set(firmData)
+                            .addOnSuccessListener {
+                                uploadImageToFirebase(firmType, firmName, user.uid)
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                        Toast.makeText(this, "Invalid firm type", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     Toast.makeText(this, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
@@ -161,7 +202,6 @@ class FirmSignUpActivity : AppCompatActivity() {
         }
 
         // Firebase Storage'a doğru klasöre yükleme yapıyoruz.
-        // "CarparkFirmsImages" gibi bir klasöre görseli yüklüyoruz
         val storageRef = storage.reference.child("$firmType" + "Images/$firmName/$userId.jpg")
 
         // Görseli Firebase Storage'a yüklüyoruz
@@ -170,18 +210,34 @@ class FirmSignUpActivity : AppCompatActivity() {
                 // Yükleme başarılı olursa, image URL'sini alıp Firestore'a kaydediyoruz
                 storageRef.downloadUrl.addOnSuccessListener { uri ->
                     val imageUrl = uri.toString()
+
+                    // Field adını firmType'e göre belirliyoruz
+                    val imageField = when (firmType) {
+                        "CarparkFirms" -> "parkImageUrl"
+                        "InspectionFirms" -> "inspectionImageUrl"
+                        "TireFirms" -> "tireImageUrl"
+                        "TowFirms" -> "towImageUrl"
+                        else -> "imageUrl" // Varsayılan bir değer (opsiyonel)
+                    }
+
+                    // Firestore'da ilgili field'ı güncelliyoruz
                     firestore.collection(firmType).document(userId)
-                        .update("parkImageUrl", imageUrl)
+                        .update(imageField, imageUrl)
                         .addOnSuccessListener {
                             Toast.makeText(this, "Image uploaded successfully", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this, Onboarding1Activity::class.java)
+                            val intent = Intent(this, UpdateFirmDetailActivity::class.java)
+                            intent.putExtra("firmType", firmType)
+                            intent.putExtra("firmId", userId)
                             startActivity(intent)
                             finish()
                         }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "Failed to update Firestore: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
                 }
             }
-            .addOnFailureListener {
-                Toast.makeText(this, "Failed to upload image: ${it.message}", Toast.LENGTH_SHORT).show()
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to upload image: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 }

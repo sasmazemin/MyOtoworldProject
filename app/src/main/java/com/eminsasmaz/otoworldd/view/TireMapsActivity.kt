@@ -90,7 +90,8 @@ class TireMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickL
                         val documents= value.documents
 
                         for (document in documents) {
-                            val tireAdress = document.getString("tireAdress") ?: "No Address"
+                            val tireFirmId=document.id
+                            val tireAddress = document.getString("tireAddress") ?: "No Address"
                             val tireContact = document.getString("tireContact") ?: "No Contact"
                             val tireFirmName = document.getString("tireFirmName") ?: "No Firm Name"
                             val tireImageUrl = document.getString("tireImageUrl") ?: "No Image"
@@ -98,14 +99,15 @@ class TireMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickL
                             val tirePriceList = document.getString("tirePriceList") ?: "No Price List"
                             val tireStatus = document.getBoolean("tireStatus") ?: false
                             val tireWorkingHours = document.getString("tireWorkingHours") ?: "No Working Hours"
-                            val tireMail = document.getString("tireMail") ?: "No Mail"
-                            val tirePassword = document.getString("tirePassword") ?: "No Password"
-                            val tireType = document.getString("tireType") ?: "No Type"
+                            val tireMail = document.getString("tireMail") ?: "No Park Mail"
+                            val tirePassword = document.getString("tirePassword") ?: "No Park Password"
+                            val parkType = document.getString("parkType") ?: "No Park Type"
+                            val userType = document.getString("userType") ?: "No User Type"
 
                             if (location != null) {
                                 val tireList = TireModel(
-                                    tireAdress,tireContact,tireFirmName,tireImageUrl,location,location.latitude,location.longitude,
-                                    tirePriceList,tireStatus,tireWorkingHours,tireMail,tirePassword,tireType
+                                    tireFirmId,tireAddress, tireContact, tireFirmName, tireImageUrl, location,
+                                    location.latitude, location.longitude, tirePriceList, tireStatus, tireWorkingHours,tireMail,tirePassword,parkType,userType
                                 )
                                 //println(tireAdress)
                                 tireArrayList.add(tireList)

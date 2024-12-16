@@ -54,7 +54,7 @@ class TireFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateT
 
         binding.firmName.text = firm.tireFirmName
         binding.firmName2.text = firm.tireFirmName
-        binding.firmAddress.text = firm.tireAdress
+        binding.firmAddress.text = firm.tireAddress
         binding.firmContact.text = firm.tireContact
         binding.firmWorkingHours.text = firm.tireWorkingHours
         binding.firmPriceList.text = firm.tirePriceList

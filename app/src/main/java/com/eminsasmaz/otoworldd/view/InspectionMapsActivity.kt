@@ -87,7 +87,8 @@ class InspectionMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarker
                         val documents= value.documents
 
                         for (document in documents) {
-                            val inspectionAdress = document.getString("inspectionAdress") ?: "No Address"
+                            val inspectionFirmId=document.id
+                            val inspectionAddress = document.getString("inspectionAddress") ?: "No Address"
                             val inspectionContact = document.getString("inspectionContact") ?: "No Contact"
                             val inspectionFirmName = document.getString("inspectionFirmName") ?: "No Firm Name"
                             val inspectionImageUrl = document.getString("inspectionImageUrl") ?: "No Image"
@@ -95,11 +96,16 @@ class InspectionMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarker
                             val inspectionPriceList = document.getString("inspectionPriceList") ?: "No Price List"
                             val inspectionStatus = document.getBoolean("inspectionStatus") ?: false
                             val inspectionWorkingHours = document.getString("inspectionWorkingHours") ?: "No Working Hours"
+                            val inspectionMail = document.getString("inspectionMail") ?: "No Park Mail"
+                            val inspectionPassword = document.getString("inspectionPassword") ?: "No Park Password"
+                            val parkType = document.getString("parkType") ?: "No Park Type"
+                            val userType = document.getString("userType") ?: "No User Type"
+
 
                             if (location != null) {
                                 val inspectionList = InspectionModel(
-                                    inspectionAdress, inspectionContact, inspectionFirmName, inspectionImageUrl, location,
-                                    location.latitude, location.longitude, inspectionPriceList, inspectionStatus, inspectionWorkingHours
+                                    inspectionFirmId,inspectionAddress, inspectionContact, inspectionFirmName, inspectionImageUrl, location,
+                                    location.latitude, location.longitude, inspectionPriceList, inspectionStatus, inspectionWorkingHours,inspectionMail,inspectionPassword,parkType,userType
                                 )
                                 //println(parkFirmName)
                                 inspectionArrayList.add(inspectionList)
@@ -117,7 +123,6 @@ class InspectionMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarker
         }
 
     }
-
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap

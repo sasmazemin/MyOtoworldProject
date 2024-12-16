@@ -53,7 +53,7 @@ class TowFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateTi
 
         binding.firmName.text = firm.towFirmName
         binding.firmName2.text = firm.towFirmName
-        binding.firmAddress.text = firm.towAdress
+        binding.firmAddress.text = firm.towAddress
         binding.firmContact.text = firm.towContact
         binding.firmWorkingHours.text = firm.towWorkingHours
         binding.firmPriceList.text = firm.towPriceList

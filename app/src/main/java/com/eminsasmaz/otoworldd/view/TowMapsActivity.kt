@@ -91,7 +91,8 @@ class TowMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickLi
                         val documents= value.documents
 
                         for (document in documents) {
-                            val towAdress = document.getString("towAdress") ?: "No Address"
+                            val towFirmId=document.id
+                            val towAddress = document.getString("towAddress") ?: "No Address"
                             val towContact = document.getString("towContact") ?: "No Contact"
                             val towFirmName = document.getString("towFirmName") ?: "No Firm Name"
                             val towImageUrl = document.getString("towImageUrl") ?: "No Image"
@@ -99,11 +100,15 @@ class TowMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickLi
                             val towPriceList = document.getString("towPriceList") ?: "No Price List"
                             val towStatus = document.getBoolean("towStatus") ?: false
                             val towWorkingHours = document.getString("towWorkingHours") ?: "No Working Hours"
+                            val towMail = document.getString("towMail") ?: "No Park Mail"
+                            val towPassword = document.getString("towPassword") ?: "No Park Password"
+                            val parkType = document.getString("parkType") ?: "No Park Type"
+                            val userType = document.getString("userType") ?: "No User Type"
 
                             if (location != null) {
                                 val towList = TowModel(
-                                    towAdress,towContact,towFirmName,towImageUrl,location,location.latitude,location.longitude,
-                                    towPriceList,towStatus,towWorkingHours
+                                    towFirmId,towAddress, towContact, towFirmName, towImageUrl, location,
+                                    location.latitude, location.longitude, towPriceList, towStatus, towWorkingHours,towMail,towPassword,parkType,userType
                                 )
                                 //println(towAdress)
                                 towArrayList.add(towList)

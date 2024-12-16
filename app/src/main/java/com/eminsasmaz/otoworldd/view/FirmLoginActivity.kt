@@ -109,11 +109,25 @@ class FirmLoginActivity : AppCompatActivity() {
                 if (result.exists()) {
                     val userType = result.getString("userType")
                     if (userType == "Firm") {
-                        // "Firm" kullanıcı tipi ise ana ekrana yönlendir
-                        val intent = Intent(this, Onboarding1Activity::class.java)
-                        startActivity(intent)
-                        finish()
-                        return@addOnSuccessListener
+                        // Firm kullanıcısı varsa firmType'ı belirleyelim
+                        val firmType = when {
+                            result.reference.parent.id == "CarparkFirms" -> "CarparkFirms"
+                            result.reference.parent.id == "InspectionFirms" -> "InspectionFirms"
+                            result.reference.parent.id == "TireFirms" -> "TireFirms"
+                            result.reference.parent.id == "TowFirms" -> "TowFirms"
+                            else -> null
+                        }
+
+                        if (firmType != null) {
+                            // FirmType ve firmId ile intent oluşturup gönderelim
+                            val firmId = result.id
+                            val intent = Intent(this, UpdateFirmDetailActivity::class.java)
+                            intent.putExtra("firmType", firmType)
+                            intent.putExtra("firmId", firmId)
+                            startActivity(intent)
+                            finish()
+                            return@addOnSuccessListener
+                        }
                     }
                 }
             }

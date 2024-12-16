@@ -53,7 +53,7 @@ class InspectionFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment
 
         binding.firmName.text = firm.inspectionFirmName
         binding.firmName2.text = firm.inspectionFirmName
-        binding.firmAddress.text = firm.inspectionAdress
+        binding.firmAddress.text = firm.inspectionAddress
         binding.firmContact.text = firm.inspectionContact
         binding.firmWorkingHours.text = firm.inspectionWorkingHours
         binding.firmPriceList.text = firm.inspectionPriceList
