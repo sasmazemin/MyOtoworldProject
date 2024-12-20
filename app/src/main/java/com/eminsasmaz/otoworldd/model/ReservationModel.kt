@@ -7,5 +7,5 @@ data class ReservationModel (
     val selectedFirmName: String? = null,
     val selectedVehiclePlate: String? = null,
     val selectedDateTime: String? = null,
-    val appointmentStatus: Boolean = false
+    var appointmentStatus: String = "waiting for approval" // Varsayılan durum
     )

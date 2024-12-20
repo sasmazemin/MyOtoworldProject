@@ -81,6 +81,7 @@
 
                     <!-- İkon -->
                     <ImageView
+                        android:id="@+id/appointment_status_image"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/check_svgrepo_com_2_green"

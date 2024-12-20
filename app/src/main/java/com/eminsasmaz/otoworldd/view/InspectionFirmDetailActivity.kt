@@ -135,7 +135,7 @@ class InspectionFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment
         }
         if (selectedDateTime != null && selectedVehiclePlate != null) {
             val reservationData = hashMapOf(
-                "appointmentStatus" to false,
+                "appointmentStatus" to "waiting for approval", // Boolean yerine String olarak kaydediliyor
                 "selectedDateTime" to selectedDateTime,
                 "selectedFirmName" to selectedFirmName,
                 "selectedFirmPhoto" to selectedFirmPhoto,

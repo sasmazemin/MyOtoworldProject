@@ -143,8 +143,9 @@ class ParkFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateT
             return
         }
         if (selectedDateTime != null && selectedVehiclePlate != null) {
+            // appointmentStatus artık String olarak tanımlandı
             val reservationData = hashMapOf(
-                "appointmentStatus" to false,
+                "appointmentStatus" to "waiting for approval", // Boolean yerine String olarak kaydediliyor
                 "selectedDateTime" to selectedDateTime,
                 "selectedFirmName" to selectedFirmName,
                 "selectedFirmPhoto" to selectedFirmPhoto,
@@ -166,6 +167,7 @@ class ParkFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateT
             Toast.makeText(this, "Tarih, saat veya araç bilgisi eksik!", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     override fun onDateTimeSelected(
         date: String,

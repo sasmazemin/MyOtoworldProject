@@ -249,5 +249,4 @@ class UpdateFirmDetailActivity : AppCompatActivity() {
             Toast.makeText(this, "Failed to list items: ${exception.message}", Toast.LENGTH_SHORT).show()
         }
     }
-
 }
