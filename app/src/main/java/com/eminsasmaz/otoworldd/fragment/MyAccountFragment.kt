@@ -13,8 +13,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class MyAccountFragment : Fragment() {
-
-
     private lateinit var binding: FragmentMyAccountBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore

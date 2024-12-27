@@ -94,7 +94,7 @@ class TireMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickL
                             val tireAddress = document.getString("tireAddress") ?: "No Address"
                             val tireContact = document.getString("tireContact") ?: "No Contact"
                             val tireFirmName = document.getString("tireFirmName") ?: "No Firm Name"
-                            val tireImageUrl = document.getString("tireImageUrl") ?: "No Image"
+                            val tireImageUrl = document.getString("tireImageUrl") ?: ""
                             val location = document.getGeoPoint("location")
                             val tirePriceList = document.getString("tirePriceList") ?: "No Price List"
                             val tireStatus = document.getBoolean("tireStatus") ?: false

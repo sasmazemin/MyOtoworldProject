@@ -33,7 +33,7 @@ class ReservationAdapter(
                     binding.textView4.text = "Waiting for Approval"
                     binding.textView4.setTextColor(ContextCompat.getColor(binding.root.context, R.color.waitingColor))
                 }
-                "canceled" -> {
+                "rejected" -> {
                     binding.appointmentStatusImage.setImageResource(R.drawable.times_svgrepo_com_1_red)
                     binding.textView4.text = "Canceled"
                     binding.textView4.setTextColor(ContextCompat.getColor(binding.root.context, R.color.mainColor))

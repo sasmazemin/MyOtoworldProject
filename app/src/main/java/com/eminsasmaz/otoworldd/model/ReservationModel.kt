@@ -7,5 +7,14 @@ data class ReservationModel (
     val selectedFirmName: String? = null,
     val selectedVehiclePlate: String? = null,
     val selectedDateTime: String? = null,
-    var appointmentStatus: String = "waiting for approval" // Varsayılan durum
-    )
+    val userId: String? = null,
+    val firmId: String? = null,
+    val reservationId: String? = null,
+    var appointmentStatus: String = STATUS_WAITING // Varsayılan durum
+) {
+    companion object {
+        const val STATUS_WAITING = "waiting for approval"
+        const val STATUS_APPROVED = "approved"
+        const val STATUS_REJECTED = "rejected"
+    }
+}

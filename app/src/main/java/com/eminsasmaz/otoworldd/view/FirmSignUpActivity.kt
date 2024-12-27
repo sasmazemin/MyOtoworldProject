@@ -1,6 +1,7 @@
 package com.eminsasmaz.otoworldd.view
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -181,6 +182,7 @@ class FirmSignUpActivity : AppCompatActivity() {
 
                         firmRef.set(firmData)
                             .addOnSuccessListener {
+                                saveFirmInfoToSharedPreferences(firmType, user.uid)
                                 uploadImageToFirebase(firmType, firmName, user.uid)
                             }
                             .addOnFailureListener { e ->
@@ -239,6 +241,13 @@ class FirmSignUpActivity : AppCompatActivity() {
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Failed to upload image: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+    private fun saveFirmInfoToSharedPreferences(firmType: String, firmId: String) {
+        val sharedPreferences = getSharedPreferences("UserInfo", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("firmId", firmId)
+        editor.putString("firmType", firmType)
+        editor.apply()
     }
 }
 

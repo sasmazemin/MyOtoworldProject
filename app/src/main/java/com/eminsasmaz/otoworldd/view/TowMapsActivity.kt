@@ -95,7 +95,7 @@ class TowMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickLi
                             val towAddress = document.getString("towAddress") ?: "No Address"
                             val towContact = document.getString("towContact") ?: "No Contact"
                             val towFirmName = document.getString("towFirmName") ?: "No Firm Name"
-                            val towImageUrl = document.getString("towImageUrl") ?: "No Image"
+                            val towImageUrl = document.getString("towImageUrl") ?: ""
                             val location = document.getGeoPoint("location")
                             val towPriceList = document.getString("towPriceList") ?: "No Price List"
                             val towStatus = document.getBoolean("towStatus") ?: false

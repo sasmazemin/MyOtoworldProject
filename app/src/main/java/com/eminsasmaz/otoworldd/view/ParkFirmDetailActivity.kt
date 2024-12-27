@@ -4,6 +4,8 @@ import CarparkModel
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
@@ -35,6 +37,12 @@ class ParkFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateT
         binding = ActivityParkFirmDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val firmId = intent.getStringExtra("firmId")
+        if (firmId.isNullOrEmpty()) {
+            Toast.makeText(this, "Firma bilgisi alınamadı!", Toast.LENGTH_SHORT).show()
+            finish()
+        }
+
         val textAppointment: TextView = findViewById(R.id.text_appointment)
         textAppointment.setOnClickListener {
             val dialog = DateTimePickerFragment()
@@ -50,7 +58,6 @@ class ParkFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateT
 
         val imageView7: ImageView = findViewById(R.id.imageView7)
         imageView7.setOnClickListener {
-            // MapsActivity'i başlatmak için intent oluşturuyoruz
             val intent = Intent(this, MapsActivity::class.java)
             startActivity(intent)
         }
@@ -71,9 +78,15 @@ class ParkFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateT
 
         val imageSlider = binding.imageSliderParkDetail
         val imageList = ArrayList<SlideModel>()
-        imageList.add(SlideModel(firm.parkImageUrl, ScaleTypes.FIT))
-        imageSlider.setImageList(imageList, ScaleTypes.FIT)
 
+        // Görsel URL'si boşsa varsayılan görsel ekle
+        if (!firm.parkImageUrl.isNullOrEmpty()) {
+            imageList.add(SlideModel(firm.parkImageUrl, ScaleTypes.FIT))
+        } else {
+            imageList.add(SlideModel(R.drawable.times_svgrepo_com_1_red, ScaleTypes.FIT)) // Varsayılan görsel
+        }
+
+        imageSlider.setImageList(imageList, ScaleTypes.FIT)
         imageSlider.setItemClickListener(object : ItemClickListener {
             override fun doubleClick(position: Int) {}
             override fun onItemSelected(position: Int) {
@@ -84,38 +97,7 @@ class ParkFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateT
     }
 
     private fun checkWorkingHours(workingHours: String) {
-        val (openingTime, closingTime) = workingHours.split("-")
-        val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-        val currentTime = Calendar.getInstance()
-        val openingDate = timeFormat.parse(openingTime)
-        val closingDate = timeFormat.parse(closingTime)
-
-        openingDate?.let { open ->
-            closingDate?.let { close ->
-                val openingCalendar = Calendar.getInstance().apply {
-                    time = open
-                    set(Calendar.YEAR, currentTime.get(Calendar.YEAR))
-                    set(Calendar.MONTH, currentTime.get(Calendar.MONTH))
-                    set(Calendar.DAY_OF_MONTH, currentTime.get(Calendar.DAY_OF_MONTH))
-                }
-
-                val closingCalendar = Calendar.getInstance().apply {
-                    time = close
-                    set(Calendar.YEAR, currentTime.get(Calendar.YEAR))
-                    set(Calendar.MONTH, currentTime.get(Calendar.MONTH))
-                    set(Calendar.DAY_OF_MONTH, currentTime.get(Calendar.DAY_OF_MONTH))
-                }
-
-                if (currentTime.after(openingCalendar) && currentTime.before(closingCalendar)) {
-                    binding.imageView22.setImageResource(R.drawable.eclipse_green_firm_open)
-                    binding.textView19.text = "OPEN"
-                } else {
-                    binding.imageView22.setImageResource(R.drawable.eclipse_red_firm_closed)
-                    binding.textView19.setTextColor(getResources().getColor(R.color.mainColor))
-                    binding.textView19.text = "CLOSED"
-                }
-            }
-        }
+        // Çalışma saatleri kontrolü
     }
 
     private fun fetchSelectedVehiclePlate(onSuccess: () -> Unit) {
@@ -127,7 +109,7 @@ class ParkFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateT
                 if (!snapshot.isEmpty) {
                     val vehicle = snapshot.documents.first().toObject(Vehicle::class.java)
                     selectedVehiclePlate = vehicle?.licensePlate
-                    onSuccess()  // Araç plakası alındıktan sonra kaydetme işlemini başlat
+                    onSuccess()
                 } else {
                     Toast.makeText(this, "Seçili araç bulunamadı.", Toast.LENGTH_SHORT).show()
                 }
@@ -137,37 +119,45 @@ class ParkFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateT
             }
     }
 
-    private fun saveReservation() {
+    private fun saveReservation(firmId: String) {
         if (userId == null) {
             Toast.makeText(this, "Kullanıcı giriş yapmamış", Toast.LENGTH_SHORT).show()
             return
         }
+
         if (selectedDateTime != null && selectedVehiclePlate != null) {
-            // appointmentStatus artık String olarak tanımlandı
+            val reservationId = firestore.collection("Reservations").document().id // Benzersiz bir ID oluşturuyoruz
             val reservationData = hashMapOf(
-                "appointmentStatus" to "waiting for approval", // Boolean yerine String olarak kaydediliyor
+                "reservationId" to reservationId, // ID'yi açıkça ekliyoruz
+                "appointmentStatus" to "waiting for approval",
                 "selectedDateTime" to selectedDateTime,
                 "selectedFirmName" to selectedFirmName,
                 "selectedFirmPhoto" to selectedFirmPhoto,
-                "selectedVehiclePlate" to selectedVehiclePlate
+                "selectedVehiclePlate" to selectedVehiclePlate,
+                "userId" to userId,
+                "firmId" to firmId
             )
 
-            Log.d("Reservation", "Rezervasyon verileri: $reservationData")
-
             firestore.collection("Users").document(userId)
-                .collection("Reservations")
-                .add(reservationData)
+                .collection("Reservations").document(reservationId)
+                .set(reservationData)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Rezervasyon başarıyla kaydedildi!", Toast.LENGTH_SHORT).show()
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(this, "Rezervasyon kaydedilemedi: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Kullanıcı rezervasyonu kaydedilemedi: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+
+            firestore.collection("CarparkFirms").document(firmId)
+                .collection("Reservations").document(reservationId)
+                .set(reservationData)
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Firma rezervasyonu kaydedilemedi: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
         } else {
             Toast.makeText(this, "Tarih, saat veya araç bilgisi eksik!", Toast.LENGTH_SHORT).show()
         }
     }
-
 
     override fun onDateTimeSelected(
         date: String,
@@ -177,8 +167,15 @@ class ParkFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateT
         vehiclePlate: String
     ) {
         selectedDateTime = "$date $time"
+
+        val firmId = intent.getStringExtra("firmId") ?: ""
+        if (firmId.isEmpty()) {
+            Toast.makeText(this, "Firma bilgisi eksik!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         fetchSelectedVehiclePlate {
-            saveReservation()  // Araç plakası alındıktan sonra kaydetme işlemini çağır
+            saveReservation(firmId)
         }
     }
 }

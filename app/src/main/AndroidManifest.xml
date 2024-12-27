@@ -24,6 +24,15 @@
         android:theme="@style/Theme.Otoworldd"
         tools:targetApi="31">
         <activity
+            android:name=".view.FirmReservationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.FirmProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.FirmHomeScreenActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.UpdateFirmDetailActivity"
             android:exported="false" />
         <activity

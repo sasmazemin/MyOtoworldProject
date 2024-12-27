@@ -1,7 +1,9 @@
 package com.eminsasmaz.otoworldd.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import com.eminsasmaz.otoworldd.R
 import com.eminsasmaz.otoworldd.databinding.ActivityUpdateFirmDetailBinding
@@ -29,67 +31,142 @@ class UpdateFirmDetailActivity : AppCompatActivity() {
         firestore = FirebaseFirestore.getInstance()
         storage = FirebaseStorage.getInstance()
 
-        // Intent ile gelen firma ID'sini al
-        firmId = intent.getStringExtra("firmId") // Firma ID'si başka bir ekrandan alınır.
+        // Intent ile gelen firma ID'sini ve türünü al
+        firmId = intent.getStringExtra("firmId")
         firmType = intent.getStringExtra("firmType")
 
-        if (firmId != null) {
-            fetchFirmDetails(firmId!!)
+        // firmId ve firmType kontrolü
+        if (firmId.isNullOrEmpty() || firmType.isNullOrEmpty()) {
+            Toast.makeText(this, "Firm ID or Type is missing!", Toast.LENGTH_SHORT).show()
+            finish()
+            return
         }
 
-        // Firma detaylarını güncelleme butonuna tıklama işlemi
+        // Firma detaylarını Firestore'dan çek
+        fetchFirmDetails(firmId!!)
+
+        // Güncelleme butonu tıklama işlemi
         binding.firmSignUpClicked.setOnClickListener {
             updateFirmDetails()
+        }
+
+        // Ana sayfaya dönme butonu
+        binding.goToHomePage.setOnClickListener {
+            val intent = Intent(this, FirmProfileActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 
     // Firma detaylarını Firestore'dan çekme işlemi
     private fun fetchFirmDetails(firmId: String) {
-        if (firmType != null) {
-            firestore.collection(firmType!!).document(firmId)
-                .get()
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-                        // Firestore verilerini alıp UI'ye yerleştiriyoruz
-                        val firmName = document.getString(getFirmField("FirmName"))
-                        oldFirmName = firmName // Eski firma ismini sakla
-                        binding.firmMailText.setText(document.getString(getFirmField("Mail")))
-                        binding.firmPasswordText.setText(document.getString(getFirmField("Password")))
-                        binding.firmConfirmPasswordText.setText(document.getString(getFirmField("Password")))
-                        binding.firmNameText.setText(firmName)
-                        binding.firmAdressText.setText(document.getString(getFirmField("Address")))
-                        binding.firmPhoneText.setText(document.getString(getFirmField("Contact")))
-                        binding.firmWorkingHourText.setText(document.getString(getFirmField("WorkingHours")))
-                        binding.firmPriceListText.setText(document.getString(getFirmField("PriceList")))
+        firestore.collection(firmType!!).document(firmId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    // Firestore verilerini alıp UI'ye yerleştiriyoruz
+                    val firmName = document.getString(getFirmField("FirmName"))
+                    oldFirmName = firmName // Eski firma ismini sakla
+                    binding.firmMailText.setText(document.getString(getFirmField("Mail")))
+                    binding.firmPasswordText.setText(document.getString(getFirmField("Password")))
+                    binding.firmConfirmPasswordText.setText(document.getString(getFirmField("Password")))
+                    binding.firmNameText.setText(firmName)
+                    binding.firmAdressText.setText(document.getString(getFirmField("Address")))
+                    binding.firmPhoneText.setText(document.getString(getFirmField("Contact")))
+                    binding.firmWorkingHourText.setText(document.getString(getFirmField("WorkingHours")))
+                    binding.firmPriceListText.setText(document.getString(getFirmField("PriceList")))
 
-                        // Firebase Authentication ile kullanıcı ID'sini alıyoruz
-                        val userId = FirebaseAuth.getInstance().currentUser?.uid
-
-                        if (userId != null) {
-                            // Firebase Storage'dan firma görselini alıp ImageView'a yerleştiriyoruz
-                            val firmImageRef = storage.reference.child("$firmType" + "Images/${binding.firmNameText.text}/$userId.jpg")
-                            firmImageRef.downloadUrl.addOnSuccessListener { uri ->
-                                Picasso.get().load(uri).into(binding.imageView48) // imageView48'e resmi yerleştiriyoruz
-                            }
-                                .addOnFailureListener { exception ->
-                                    Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_SHORT).show()
-                                }
-                        } else {
-                            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show()
+                    // Firma görselini Firebase Storage'dan al
+                    val userId = FirebaseAuth.getInstance().currentUser?.uid
+                    if (userId != null) {
+                        val firmImageRef = storage.reference.child("$firmType" + "Images/${firmName}/$userId.jpg")
+                        firmImageRef.downloadUrl.addOnSuccessListener { uri ->
+                            Picasso.get().load(uri).into(binding.imageView48) // Görseli ImageView'a yerleştir
+                        }.addOnFailureListener { exception ->
+                            Toast.makeText(this, "Error loading image: ${exception.message}", Toast.LENGTH_SHORT).show()
                         }
                     }
+                } else {
+                    Toast.makeText(this, "No such document in Firestore!", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error fetching details: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    // Firma detaylarını güncelleme işlemi
+    private fun updateFirmDetails() {
+        val mail = binding.firmMailText.text.toString()
+        val password = binding.firmPasswordText.text.toString()
+        val firmName = binding.firmNameText.text.toString()
+        val address = binding.firmAdressText.text.toString()
+        val phone = binding.firmPhoneText.text.toString()
+        val workingHours = binding.firmWorkingHourText.text.toString()
+        val priceList = binding.firmPriceListText.text.toString()
+
+        if (firmId != null) {
+            // Güncelleme verilerini hazırlama
+            val updatedData: Map<String, Any> = when (firmType) {
+                "CarparkFirms" -> hashMapOf(
+                    "parkMail" to mail,
+                    "parkPassword" to password,
+                    "parkFirmName" to firmName,
+                    "parkAddress" to address,
+                    "parkContact" to phone,
+                    "parkWorkingHours" to workingHours,
+                    "parkPriceList" to priceList
+                )
+                "InspectionFirms" -> hashMapOf(
+                    "inspectionMail" to mail,
+                    "inspectionPassword" to password,
+                    "inspectionFirmName" to firmName,
+                    "inspectionAddress" to address,
+                    "inspectionContact" to phone,
+                    "inspectionWorkingHours" to workingHours,
+                    "inspectionPriceList" to priceList
+                )
+                "TireFirms" -> hashMapOf(
+                    "tireMail" to mail,
+                    "tirePassword" to password,
+                    "tireFirmName" to firmName,
+                    "tireAddress" to address,
+                    "tireContact" to phone,
+                    "tireWorkingHours" to workingHours,
+                    "tirePriceList" to priceList
+                )
+                "TowFirms" -> hashMapOf(
+                    "towMail" to mail,
+                    "towPassword" to password,
+                    "towFirmName" to firmName,
+                    "towAddress" to address,
+                    "towContact" to phone,
+                    "towWorkingHours" to workingHours,
+                    "towPriceList" to priceList
+                )
+                else -> return
+            }
+
+            // Firestore'a güncellenmiş veriyi gönder
+            firestore.collection(firmType!!).document(firmId!!)
+                .update(updatedData)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Firm details updated successfully!", Toast.LENGTH_SHORT).show()
+                    finish()
                 }
                 .addOnFailureListener { exception ->
                     Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_SHORT).show()
                 }
+        } else {
+            Toast.makeText(this, "Invalid Firm ID", Toast.LENGTH_SHORT).show()
         }
     }
 
-    // Firma türüne göre ilgili field isimlerini döndüren fonksiyon
+    // Firma türüne göre ilgili alan adlarını döndüren fonksiyon
     private fun getFirmField(field: String): String {
         return when (firmType) {
-            "CarparkFirms" ->{
-                when(field){
+            "CarparkFirms" -> {
+                when (field) {
                     "FirmName" -> "parkFirmName"
                     "Mail" -> "parkMail"
                     "Password" -> "parkPassword"
@@ -100,8 +177,8 @@ class UpdateFirmDetailActivity : AppCompatActivity() {
                     else -> ""
                 }
             }
-            "InspectionFirms" ->{
-                when(field){
+            "InspectionFirms" -> {
+                when (field) {
                     "FirmName" -> "inspectionFirmName"
                     "Mail" -> "inspectionMail"
                     "Password" -> "inspectionPassword"
@@ -136,117 +213,7 @@ class UpdateFirmDetailActivity : AppCompatActivity() {
                     else -> ""
                 }
             }
-            else -> {
-                "" // Diğer firma türleri için uygun field'ları ekleyebilirsiniz.
-            }
-
-        }
-    }
-
-    // Firma detaylarını güncelleme işlemi
-    private fun updateFirmDetails() {
-        val mail = binding.firmMailText.text.toString()
-        val password = binding.firmPasswordText.text.toString()
-        val firmName = binding.firmNameText.text.toString()
-        val address = binding.firmAdressText.text.toString()
-        val phone = binding.firmPhoneText.text.toString()
-        val workingHours = binding.firmWorkingHourText.text.toString()
-        val priceList = binding.firmPriceListText.text.toString()
-
-        if (firmId != null) {
-            // updatedData'yı Map<String, Any> olarak tanımlıyoruz
-            val updatedData: Map<String, Any> = when (firmType) {
-                "TireFirms" -> hashMapOf(
-                    "tireMail" to mail,
-                    "tirePassword" to password,
-                    "tireFirmName" to firmName,
-                    "tireAddress" to address,
-                    "tireContact" to phone,
-                    "tireWorkingHours" to workingHours,
-                    "tirePriceList" to priceList
-                )
-                "TowFirms" -> hashMapOf(
-                    "towMail" to mail,
-                    "towPassword" to password,
-                    "towFirmName" to firmName,
-                    "towAddress" to address,
-                    "towContact" to phone,
-                    "towWorkingHours" to workingHours,
-                    "towPriceList" to priceList
-                )
-                else -> return // Eğer geçerli bir firma türü yoksa çık
-            }
-
-            // Firestore'a güncellenmiş veriyi gönderiyoruz
-            firestore.collection("$firmType").document(firmId!!)
-                .update(updatedData)
-                .addOnSuccessListener {
-                    // Eski firma klasörünü sil ve yeni klasörü oluştur
-                    oldFirmName?.let { oldName ->
-                        val oldFirmImageRef = storage.reference.child("$firmType" + "Images/$oldName")
-                        renameStorageFolder(oldFirmImageRef, firmName)
-                    }
-                    Toast.makeText(this, "Firm details updated successfully!", Toast.LENGTH_SHORT).show()
-                    finish() // İşlem başarılıysa aktivitiyi kapat
-                }
-                .addOnFailureListener { exception ->
-                    Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            Toast.makeText(this, "Invalid Firm ID", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun renameStorageFolder(oldFirmImageRef: StorageReference, newFirmName: String) {
-        oldFirmImageRef.listAll().addOnSuccessListener { result ->
-            for (item in result.items) {
-                // Yeni klasöre taşıma
-                val newFirmImageRef = storage.reference.child("$firmType" + "Images/$newFirmName/${item.name}")
-                item.getBytes(Long.MAX_VALUE).addOnSuccessListener { bytes ->
-                    newFirmImageRef.putBytes(bytes).addOnSuccessListener {
-                        // Yeni dosya URL'sini al
-                        newFirmImageRef.downloadUrl.addOnSuccessListener { newUri ->
-                            // Firestore'da URL'yi güncelle
-                            firmId?.let { id ->
-                                val imageFieldName = when (firmType) {
-                                    "CarparkFirms" -> "parkImageUrl"
-                                    "InspectionFirms" -> "inspectionImageUrl"
-                                    "TireFirms" -> "tireImageUrl"
-                                    "TowFirms" -> "towImageUrl"
-                                    else -> null
-                                }
-                                imageFieldName?.let { field ->
-                                    firestore.collection(firmType!!).document(id)
-                                        .update(field, newUri.toString())
-                                        .addOnSuccessListener {
-                                            Toast.makeText(this, "Firestore image URL updated successfully!", Toast.LENGTH_SHORT).show()
-                                        }.addOnFailureListener { exception ->
-                                            Toast.makeText(this, "Failed to update Firestore: ${exception.message}", Toast.LENGTH_SHORT).show()
-                                        }
-                                }
-                            }
-
-                            // Eski dosyayı silme
-                            item.delete().addOnSuccessListener {
-                                // Tüm süreç başarıyla tamamlandı
-                                oldFirmImageRef.delete().addOnSuccessListener {
-                                    Toast.makeText(this, "Folder renamed and updated", Toast.LENGTH_SHORT).show()
-                                }
-                            }.addOnFailureListener { exception ->
-                                Toast.makeText(this, "Failed to delete old file: ${exception.message}", Toast.LENGTH_SHORT).show()
-                            }
-                        }.addOnFailureListener { exception ->
-                            Toast.makeText(this, "Failed to get new file URL: ${exception.message}", Toast.LENGTH_SHORT).show()
-                        }
-                    }.addOnFailureListener { exception ->
-                        Toast.makeText(this, "Failed to move file: ${exception.message}", Toast.LENGTH_SHORT).show()
-                    }
-                }.addOnFailureListener { exception ->
-                    Toast.makeText(this, "Failed to download file: ${exception.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }.addOnFailureListener { exception ->
-            Toast.makeText(this, "Failed to list items: ${exception.message}", Toast.LENGTH_SHORT).show()
+            else -> ""
         }
     }
 }

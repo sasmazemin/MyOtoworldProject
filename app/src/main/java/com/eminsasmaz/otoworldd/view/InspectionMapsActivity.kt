@@ -91,7 +91,7 @@ class InspectionMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarker
                             val inspectionAddress = document.getString("inspectionAddress") ?: "No Address"
                             val inspectionContact = document.getString("inspectionContact") ?: "No Contact"
                             val inspectionFirmName = document.getString("inspectionFirmName") ?: "No Firm Name"
-                            val inspectionImageUrl = document.getString("inspectionImageUrl") ?: "No Image"
+                            val inspectionImageUrl = document.getString("inspectionImageUrl") ?: ""
                             val location = document.getGeoPoint("location")
                             val inspectionPriceList = document.getString("inspectionPriceList") ?: "No Price List"
                             val inspectionStatus = document.getBoolean("inspectionStatus") ?: false

@@ -1,5 +1,6 @@
 package com.eminsasmaz.otoworldd.view
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -38,8 +39,8 @@ class FirmLoginActivity : AppCompatActivity() {
             signInClicked()
         }
 
-        // Drawable'ı tıklanabilir hale getirmek için OnTouchListener ekliyoruz
-        binding.firmPasswordLoginText.setOnTouchListener { v, event ->
+        // Şifre görünürlüğünü değiştirme
+        binding.firmPasswordLoginText.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 val drawableEnd = 2 // Sağdaki drawable
                 if (event.rawX >= (binding.firmPasswordLoginText.right - binding.firmPasswordLoginText.compoundDrawables[drawableEnd].bounds.width())) {
@@ -121,6 +122,15 @@ class FirmLoginActivity : AppCompatActivity() {
                         if (firmType != null) {
                             // FirmType ve firmId ile intent oluşturup gönderelim
                             val firmId = result.id
+
+                            // **SharedPreferences** ile firm bilgilerini sakla
+                            val sharedPreferences = getSharedPreferences("UserInfo", Context.MODE_PRIVATE)
+                            val editor = sharedPreferences.edit()
+                            editor.putString("firmId", firmId)
+                            editor.putString("firmType", firmType)
+                            editor.apply()
+
+                            // **UpdateFirmDetailActivity**'ye yönlendir
                             val intent = Intent(this, UpdateFirmDetailActivity::class.java)
                             intent.putExtra("firmType", firmType)
                             intent.putExtra("firmId", firmId)

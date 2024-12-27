@@ -96,7 +96,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMarkerClickListen
                             val parkAddress = document.getString("parkAddress") ?: "No Address"
                             val parkContact = document.getString("parkContact") ?: "No Contact"
                             val parkFirmName = document.getString("parkFirmName") ?: "No Firm Name"
-                            val parkImageUrl = document.getString("parkImageUrl") ?: "No Image"
+                            val parkImageUrl = document.getString("parkImageUrl") ?: ""
                             val location = document.getGeoPoint("location")
                             val parkPriceList = document.getString("parkPriceList") ?: "No Price List"
                             val parkStatus = document.getBoolean("parkStatus") ?: false
@@ -210,6 +210,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,OnMarkerClickListen
         if (firm != null) {
             val intent = Intent(this, ParkFirmDetailActivity::class.java)
             intent.putExtra("FIRM", firm)
+            intent.putExtra("firmId", firm.parkFirmId) // firmId intent'e ekleniyor
+            intent.putExtra("FIRM", firm) // FIRM intent'e ekleniyor
             startActivity(intent)
 
         } else {
