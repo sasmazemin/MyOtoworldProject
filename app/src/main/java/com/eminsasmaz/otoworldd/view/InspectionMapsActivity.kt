@@ -45,49 +45,50 @@ class InspectionMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarker
     private lateinit var locationListener: LocationListener
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private lateinit var sharedPreferences: SharedPreferences
-    private var trackBoolean: Boolean?=null
-    private var selectedLatitude:Double?=null
-    private var selectedLongitude:Double?=null
-    private lateinit var inspectionArrayList:ArrayList<InspectionModel>
+    private var trackBoolean: Boolean? = null
+    private var selectedLatitude: Double? = null
+    private var selectedLongitude: Double? = null
+    private lateinit var inspectionArrayList: ArrayList<InspectionModel>
+
+    // FirmType sabit olarak InspectionFirms
+    private val firmType = "InspectionFirms"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityInspectionMapsBinding.inflate(layoutInflater)
-        val view=binding.root
+        val view = binding.root
         setContentView(view)
 
-        db= Firebase.firestore
-        auth= Firebase.auth
+        db = Firebase.firestore
+        auth = Firebase.auth
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
         registerLauncher()
 
-        sharedPreferences=this.getSharedPreferences("com.eminsasmaz.otoworldd", MODE_PRIVATE)
-        trackBoolean=false
-        selectedLatitude=0.0
-        selectedLongitude=0.0
+        sharedPreferences = this.getSharedPreferences("com.eminsasmaz.otoworldd", MODE_PRIVATE)
+        trackBoolean = false
+        selectedLatitude = 0.0
+        selectedLongitude = 0.0
 
-        inspectionArrayList=ArrayList<InspectionModel>()
+        inspectionArrayList = ArrayList()
     }
-    private fun getData(){
 
-        db.collection("InspectionFirms").addSnapshotListener { value, error ->
-
-            if(error!=null){
-                Toast.makeText(this,"Error occured",Toast.LENGTH_LONG).show()
-                Log.e("InspectionMapsActivity","Error occured",error)
+    private fun getData() {
+        db.collection(firmType).addSnapshotListener { value, error ->
+            if (error != null) {
+                Toast.makeText(this, "Error occurred", Toast.LENGTH_LONG).show()
+                Log.e("InspectionMapsActivity", "Error occurred", error)
                 return@addSnapshotListener
-            }else{
-                if(value!=null){
-                    if(!value.isEmpty){
-                        val documents= value.documents
-
+            } else {
+                if (value != null) {
+                    if (!value.isEmpty) {
+                        val documents = value.documents
                         for (document in documents) {
-                            val inspectionFirmId=document.id
+                            val inspectionFirmId = document.id
                             val inspectionAddress = document.getString("inspectionAddress") ?: "No Address"
                             val inspectionContact = document.getString("inspectionContact") ?: "No Contact"
                             val inspectionFirmName = document.getString("inspectionFirmName") ?: "No Firm Name"
@@ -95,112 +96,110 @@ class InspectionMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarker
                             val location = document.getGeoPoint("location")
                             val inspectionPriceList = document.getString("inspectionPriceList") ?: "No Price List"
                             val inspectionStatus = document.getBoolean("inspectionStatus") ?: false
-                            val inspectionWorkingHours = document.getString("inspectionWorkingHours") ?: "No Working Hours"
+                            val inspectionWorkingHours =
+                                document.getString("inspectionWorkingHours") ?: "No Working Hours"
                             val inspectionMail = document.getString("inspectionMail") ?: "No Park Mail"
                             val inspectionPassword = document.getString("inspectionPassword") ?: "No Park Password"
                             val parkType = document.getString("parkType") ?: "No Park Type"
                             val userType = document.getString("userType") ?: "No User Type"
 
-
                             if (location != null) {
                                 val inspectionList = InspectionModel(
-                                    inspectionFirmId,inspectionAddress, inspectionContact, inspectionFirmName, inspectionImageUrl, location,
-                                    location.latitude, location.longitude, inspectionPriceList, inspectionStatus, inspectionWorkingHours,inspectionMail,inspectionPassword,parkType,userType
+                                    inspectionFirmId, inspectionAddress, inspectionContact, inspectionFirmName,
+                                    inspectionImageUrl, location, location.latitude, location.longitude,
+                                    inspectionPriceList, inspectionStatus, inspectionWorkingHours,
+                                    inspectionMail, inspectionPassword, parkType, userType
                                 )
-                                //println(parkFirmName)
                                 inspectionArrayList.add(inspectionList)
-                                val marker=mMap.addMarker(
-                                    MarkerOptions().title(inspectionFirmName).position(LatLng(location.latitude,location.longitude))
+                                val marker = mMap.addMarker(
+                                    MarkerOptions().title(inspectionFirmName)
+                                        .position(LatLng(location.latitude, location.longitude))
                                 )
-                                marker?.tag=inspectionList
+                                marker?.tag = inspectionList
                             }
-
                         }
-
                     }
                 }
             }
         }
-
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
         getData()
         mMap.setOnMarkerClickListener(this)
-        locationManager=this.getSystemService(LOCATION_SERVICE) as LocationManager
 
-        locationListener= object : LocationListener{
+        locationManager = this.getSystemService(LOCATION_SERVICE) as LocationManager
+
+        locationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
-                trackBoolean=sharedPreferences.getBoolean("trackBoolean",false)
-                if(trackBoolean!!){
-                    val userLocation=LatLng(location.latitude,location.longitude)
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,15f))
-                    sharedPreferences.edit().putBoolean("trackBoolean",true).apply()
+                trackBoolean = sharedPreferences.getBoolean("trackBoolean", false)
+                if (trackBoolean!!) {
+                    val userLocation = LatLng(location.latitude, location.longitude)
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
+                    sharedPreferences.edit().putBoolean("trackBoolean", true).apply()
                 }
-
             }
         }
 
-        if(ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
-            if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)){
-                Snackbar.make(binding.root,"Permission needed for location", Snackbar.LENGTH_INDEFINITE).setAction("Give Permission"){
-
-                    //request permission
-                    permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-                }.show()
-            }else{
-                //requset permission
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            ) {
+                Snackbar.make(binding.root, "Permission needed for location", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Give Permission") {
+                        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                    }.show()
+            } else {
                 permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             }
-        }else{
-            //permission granted
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0f,locationListener)
-            val lastLocation=locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            if(lastLocation!=null){
-                val lastUserLocation=LatLng(lastLocation.latitude,lastLocation.longitude)
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation,15f))
+        } else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, locationListener)
+            val lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            if (lastLocation != null) {
+                val lastUserLocation = LatLng(lastLocation.latitude, lastLocation.longitude)
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation, 15f))
             }
-            mMap.isMyLocationEnabled=true
+            mMap.isMyLocationEnabled = true
         }
-
-        // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0f,locationListener)
-
     }
-    private fun registerLauncher(){
-        permissionLauncher=registerForActivityResult(ActivityResultContracts.RequestPermission()){ result->
-            if(result){
 
-                if(ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED){
-                    //permission granted
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0f,locationListener)
-                    val lastLocation=locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-                    if(lastLocation!=null){
-                        val lastUserLocation=LatLng(lastLocation.latitude,lastLocation.longitude)
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation,15f))
+    private fun registerLauncher() {
+        permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
+            if (result) {
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, locationListener)
+                    val lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                    if (lastLocation != null) {
+                        val lastUserLocation = LatLng(lastLocation.latitude, lastLocation.longitude)
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation, 15f))
                     }
-                    mMap.isMyLocationEnabled=true
+                    mMap.isMyLocationEnabled = true
                 }
-
-            }else{
-                //permission denied
-                Toast.makeText(this,"Permission needed!!", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Permission needed!!", Toast.LENGTH_LONG).show()
             }
         }
     }
-
 
     override fun onMarkerClick(marker: Marker): Boolean {
         val firm = marker.tag as? InspectionModel
         if (firm != null) {
-            //burada InspectionFirmDetailActiviy oluşturulup verilecek
             val intent = Intent(this, InspectionFirmDetailActivity::class.java)
-            intent.putExtra("FIRM", firm)
+            intent.putExtra("firmId", firm.inspectionFirmId) // Firm ID intent'e ekleniyor
+            intent.putExtra("FIRM", firm) // InspectionModel intent'e ekleniyor
+            intent.putExtra("firmType", firmType) // firmType intent'e ekleniyor
             startActivity(intent)
-
         } else {
             Toast.makeText(this, "Firm details not found", Toast.LENGTH_SHORT).show()
         }

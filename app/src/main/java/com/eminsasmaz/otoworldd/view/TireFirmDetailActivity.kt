@@ -19,25 +19,30 @@ import java.util.Calendar
 import java.util.Locale
 
 class TireFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateTimePickerListener {
-    private lateinit var binding:ActivityTireFirmDetailBinding
+    private lateinit var binding: ActivityTireFirmDetailBinding
     private var selectedFirmName: String? = null
     private var selectedFirmPhoto: String? = null
     private var selectedVehiclePlate: String? = null
     private var selectedDateTime: String? = null
+    private var firmId: String? = null // Intent'ten alınacak firmId
+    private var firmType: String? = null // Intent'ten alınacak firmType
     private val firestore = FirebaseFirestore.getInstance()
     private val userId = FirebaseAuth.getInstance().currentUser?.uid
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding=ActivityTireFirmDetailBinding.inflate(layoutInflater)
-        val view=binding.root
+        binding = ActivityTireFirmDetailBinding.inflate(layoutInflater)
+        val view = binding.root
         setContentView(view)
 
-        val textAppointment: TextView = findViewById(R.id.text_appointment)
-        textAppointment.setOnClickListener {
-            val dialog = DateTimePickerFragment()
-            dialog.show(supportFragmentManager, "DateTimePicker")
+        // Intent'ten firmId ve firmType al
+        firmId = intent.getStringExtra("firmId")
+        firmType = intent.getStringExtra("firmType")
+
+        if (firmId == null || firmType == null) {
+            Toast.makeText(this, "Firma bilgisi eksik!", Toast.LENGTH_SHORT).show()
+            finish()
+            return
         }
 
         val firm = intent.getParcelableExtra<TireModel>("FIRM")
@@ -45,6 +50,11 @@ class TireFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateT
             setupFirmDetails(it)
         } ?: run {
             Toast.makeText(this, "Firm details not found", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.textAppointment.setOnClickListener {
+            val dialog = DateTimePickerFragment()
+            dialog.show(supportFragmentManager, "DateTimePicker")
         }
     }
 
@@ -63,7 +73,13 @@ class TireFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateT
 
         val imageSlider = binding.imageSliderTireDetail
         val imageList = ArrayList<SlideModel>()
-        imageList.add(SlideModel(firm.tireImageUrl, ScaleTypes.FIT))
+
+        if (firm.tireImageUrl.isNotEmpty()) {
+            imageList.add(SlideModel(firm.tireImageUrl, ScaleTypes.FIT))
+        } else {
+            imageList.add(SlideModel(R.drawable.times_svgrepo_com_1_red, ScaleTypes.FIT))
+        }
+
         imageSlider.setImageList(imageList, ScaleTypes.FIT)
 
         imageSlider.setItemClickListener(object : ItemClickListener {
@@ -103,7 +119,7 @@ class TireFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateT
                     binding.textView21.text = "OPEN"
                 } else {
                     binding.imageView35.setImageResource(R.drawable.eclipse_red_firm_closed)
-                    binding.textView21.setTextColor(getResources().getColor(R.color.mainColor))
+                    binding.textView21.setTextColor(resources.getColor(R.color.mainColor))
                     binding.textView21.text = "CLOSED"
                 }
             }
@@ -134,23 +150,42 @@ class TireFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateT
             Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show()
             return
         }
+
         if (selectedDateTime != null && selectedVehiclePlate != null) {
+            val reservationId = firestore.collection("Reservations").document().id // reservationId oluşturuluyor
             val reservationData = hashMapOf(
-                "appointmentStatus" to "waiting for approval", // Boolean yerine String olarak kaydediliyor
+                "reservationId" to reservationId,
+                "appointmentStatus" to "waiting for approval", // Status başta 'waiting for approval' olarak atanır
                 "selectedDateTime" to selectedDateTime,
                 "selectedFirmName" to selectedFirmName,
                 "selectedFirmPhoto" to selectedFirmPhoto,
-                "selectedVehiclePlate" to selectedVehiclePlate
+                "selectedVehiclePlate" to selectedVehiclePlate,
+                "userId" to userId,
+                "firmId" to firmId
             )
 
-            firestore.collection("Users").document(userId)
+            // Kullanıcı rezervasyonuna kaydet
+            firestore.collection("Users").document(userId!!)
                 .collection("Reservations")
-                .add(reservationData)
+                .document(reservationId) // reservationId kullanılarak kaydediliyor
+                .set(reservationData)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Reservation successfully saved!", Toast.LENGTH_SHORT).show()
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(this, "Failed to save reservation: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+
+            // Firma rezervasyonuna kaydet
+            firestore.collection(firmType!!).document(firmId!!)
+                .collection("Reservations")
+                .document(reservationId) // reservationId kullanılarak kaydediliyor
+                .set(reservationData)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Reservation successfully saved for the firm!", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Failed to save firm reservation: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
         } else {
             Toast.makeText(this, "Missing date, time or vehicle information!", Toast.LENGTH_SHORT).show()

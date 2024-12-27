@@ -19,24 +19,30 @@ import java.util.Calendar
 import java.util.Locale
 
 class TowFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateTimePickerListener {
-    private lateinit var binding:ActivityTowFirmDetailBinding
+    private lateinit var binding: ActivityTowFirmDetailBinding
     private var selectedFirmName: String? = null
     private var selectedFirmPhoto: String? = null
     private var selectedVehiclePlate: String? = null
     private var selectedDateTime: String? = null
+    private var firmId: String? = null
+    private var firmType: String? = null // Intent'ten alınacak firmType
     private val firestore = FirebaseFirestore.getInstance()
     private val userId = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding=ActivityTowFirmDetailBinding.inflate(layoutInflater)
-        val view=binding.root
+        binding = ActivityTowFirmDetailBinding.inflate(layoutInflater)
+        val view = binding.root
         setContentView(view)
 
-        val textAppointment: TextView = findViewById(R.id.text_appointment)
-        textAppointment.setOnClickListener {
-            val dialog = DateTimePickerFragment()
-            dialog.show(supportFragmentManager, "DateTimePicker")
+        // Intent'ten firmId ve firmType al
+        firmId = intent.getStringExtra("firmId")
+        firmType = intent.getStringExtra("firmType") // firmType alınır
+
+        if (firmId == null || firmType == null) {
+            Toast.makeText(this, "Firma bilgisi eksik!", Toast.LENGTH_SHORT).show()
+            finish()
+            return
         }
 
         val firm = intent.getParcelableExtra<TowModel>("FIRM")
@@ -44,6 +50,11 @@ class TowFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateTi
             setupFirmDetails(it)
         } ?: run {
             Toast.makeText(this, "Firm details not found", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.textAppointment.setOnClickListener {
+            val dialog = DateTimePickerFragment()
+            dialog.show(supportFragmentManager, "DateTimePicker")
         }
     }
 
@@ -62,7 +73,13 @@ class TowFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateTi
 
         val imageSlider = binding.imageSliderTowDetail
         val imageList = ArrayList<SlideModel>()
-        imageList.add(SlideModel(firm.towImageUrl, ScaleTypes.FIT))
+
+        if (firm.towImageUrl.isNotEmpty()) {
+            imageList.add(SlideModel(firm.towImageUrl, ScaleTypes.FIT))
+        } else {
+            imageList.add(SlideModel(R.drawable.times_svgrepo_com_1_red, ScaleTypes.FIT))
+        }
+
         imageSlider.setImageList(imageList, ScaleTypes.FIT)
 
         imageSlider.setItemClickListener(object : ItemClickListener {
@@ -130,29 +147,48 @@ class TowFirmDetailActivity : AppCompatActivity(), DateTimePickerFragment.DateTi
 
     private fun saveReservation() {
         if (userId == null) {
-            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Kullanıcı giriş yapmamış", Toast.LENGTH_SHORT).show()
             return
         }
+
         if (selectedDateTime != null && selectedVehiclePlate != null) {
+            val reservationId = firestore.collection("Reservations").document().id // reservationId oluşturuluyor
             val reservationData = hashMapOf(
-                "appointmentStatus" to "waiting for approval", // Boolean yerine String olarak kaydediliyor
+                "reservationId" to reservationId,
+                "appointmentStatus" to "waiting for approval", // Status başta 'waiting for approval' olarak atanır
                 "selectedDateTime" to selectedDateTime,
                 "selectedFirmName" to selectedFirmName,
                 "selectedFirmPhoto" to selectedFirmPhoto,
-                "selectedVehiclePlate" to selectedVehiclePlate
+                "selectedVehiclePlate" to selectedVehiclePlate,
+                "userId" to userId,
+                "firmId" to firmId
             )
 
-            firestore.collection("Users").document(userId)
+            // Kullanıcıya kaydet
+            firestore.collection("Users").document(userId!!)
                 .collection("Reservations")
-                .add(reservationData)
+                .document(reservationId) // reservationId kullanılarak kaydediliyor
+                .set(reservationData)
                 .addOnSuccessListener {
-                    Toast.makeText(this, "Reservation successfully saved!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Rezervasyon başarıyla kaydedildi!", Toast.LENGTH_SHORT).show()
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(this, "Failed to save reservation: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Rezervasyon kaydedilemedi: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+
+            // Firma için kaydet
+            firestore.collection(firmType!!).document(firmId!!)
+                .collection("Reservations")
+                .document(reservationId) // reservationId kullanılarak kaydediliyor
+                .set(reservationData)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Firma rezervasyonu kaydedildi!", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Firma rezervasyonu kaydedilemedi: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
         } else {
-            Toast.makeText(this, "Missing date, time or vehicle information!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Eksik bilgiler: tarih, saat veya araç plakası.", Toast.LENGTH_SHORT).show()
         }
     }
 

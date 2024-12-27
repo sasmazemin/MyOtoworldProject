@@ -24,6 +24,9 @@
         android:theme="@style/Theme.Otoworldd"
         tools:targetApi="31">
         <activity
+            android:name=".view.InspectionFirmReservationActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.FirmReservationActivity"
             android:exported="false" />
         <activity

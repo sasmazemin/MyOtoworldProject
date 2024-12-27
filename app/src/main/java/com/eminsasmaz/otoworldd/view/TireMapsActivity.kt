@@ -51,6 +51,9 @@ class TireMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickL
     private var selectedLongitude:Double?=null
     private lateinit var tireArrayList:ArrayList<TireModel>
 
+    // FirmType sabit olarak InspectionFirms
+    private val firmType = "TireFirms"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -202,7 +205,9 @@ class TireMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickL
         if (firm != null) {
             //burada tireFirmDetailActiviy oluşturulup verilecek
             val intent = Intent(this, TireFirmDetailActivity::class.java)
-            intent.putExtra("FIRM", firm)
+            intent.putExtra("FIRM", firm) // TireModel intent'e ekleniyor
+            intent.putExtra("firmId", firm.tireFirmId) // Firm ID intent'e ekleniyor
+            intent.putExtra("firmType", firmType) // firmType intent'e ekleniyor
             startActivity(intent)
 
         } else {

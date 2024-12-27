@@ -52,6 +52,8 @@ class TowMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickLi
     private var selectedLongitude:Double?=null
     private lateinit var towArrayList:ArrayList<TowModel>
 
+    // FirmType sabit olarak InspectionFirms
+    private val firmType = "TowFirms"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -202,7 +204,9 @@ class TowMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickLi
         if (firm != null) {
             //burada towFirmDetailActiviy oluşturulup verilecek
             val intent = Intent(this, TowFirmDetailActivity::class.java)
-            intent.putExtra("FIRM", firm)
+            intent.putExtra("FIRM", firm) // TowModel intent'e ekleniyor
+            intent.putExtra("firmId", firm.towFirmId) // Firm ID intent'e ekleniyor
+            intent.putExtra("firmType", firmType) // firmType intent'e ekleniyor
             startActivity(intent)
 
         } else {

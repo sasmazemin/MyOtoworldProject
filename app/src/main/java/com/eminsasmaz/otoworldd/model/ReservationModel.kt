@@ -9,7 +9,7 @@ data class ReservationModel (
     val selectedDateTime: String? = null,
     val userId: String? = null,
     val firmId: String? = null,
-    val reservationId: String? = null,
+    var reservationId: String? = null,
     var appointmentStatus: String = STATUS_WAITING // Varsayılan durum
 ) {
     companion object {
